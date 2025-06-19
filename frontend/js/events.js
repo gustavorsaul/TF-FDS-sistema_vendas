@@ -5,7 +5,7 @@ const Events = (() => {
             .addEventListener('click', carregarProdutos);
 
         document.getElementById('btn-novo-orcamento')
-            .addEventListener('click', criarOrcamento);
+            .addEventListener('click', prepararCriacaoOrcamento);
 
         document.getElementById('btn-buscar-orcamento')
             .addEventListener('click', () => {
@@ -28,6 +28,9 @@ const Events = (() => {
             if (e.target && e.target.id === 'btn-efetivar-orcamento-final') {
                 efetivarOrcamento();
             }
+            if (e.target && e.target.id === 'btn-criar-orcamento-final') {
+                criarOrcamento();
+            }
         });
     }
 
@@ -40,18 +43,57 @@ const Events = (() => {
         }
     }
 
+    async function prepararCriacaoOrcamento() {
+        try {
+            const produtos = await API.getProdutosDisponiveis();
+            UI.mostrarFormularioCriarOrcamento(produtos);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar produtos: ${error.message}`, true);
+        }
+    }
+
     async function criarOrcamento() {
         try {
-            const itens = [
-                { idProduto: 10, qtdade: 2 },
-                { idProduto: 20, qtdade: 1 }
-            ];
-            const orcamentoCriado = await API.criarNovoOrcamento(itens);
+            const nomeCliente = document.getElementById('nome-cliente').value.trim();
+            const pais = document.getElementById('pais').value.trim();
+            const estado = document.getElementById('estado').value.trim();
+
+            if (!nomeCliente || !pais || !estado) {
+                UI.mostrarMensagem("Por favor, preencha todos os dados do cliente e localização.", true);
+                return;
+            }
+
+            const produtos = await API.getProdutosDisponiveis();
+            const itens = produtos.map(prod => {
+                const qtd = parseInt(document.getElementById(`qtd-${prod.id}`).value);
+                return qtd > 0 ? { idProduto: prod.id, qtdade: qtd } : null;
+            }).filter(item => item !== null);
+
+            if (itens.length === 0) {
+                UI.mostrarMensagem("Selecione pelo menos um produto com quantidade maior que zero.", true);
+                return;
+            }
+
+            const dadosOrcamento = {
+                nomeCliente,
+                pais,
+                estado,
+                itens
+            };
+
+            const orcamentoCriado = await API.criarNovoOrcamento(dadosOrcamento);
             const orcamentoCompleto = await API.buscarOrcamentoPorId(orcamentoCriado.id);
 
-            UI.exibirOrcamento(orcamentoCompleto, `Orçamento ${orcamentoCompleto.id} criado com sucesso`);
+            UI.exibirOrcamento(orcamentoCompleto, `Orçamento ${orcamentoCompleto.id} criado com sucesso!`);
         } catch (error) {
-            UI.mostrarMensagem(`Erro ao criar orçamento: ${error.message}`, true);
+            if (error.message.includes("Localização não atendida")) {
+                UI.mostrarMensagem(
+                    `No momento não atendemos o estado ${document.getElementById('estado').value.trim()}. Em breve teremos expansão para este estado!`,
+                    true
+                );
+            } else {
+                UI.mostrarMensagem(`Erro ao criar orçamento: ${error.message}`, true);
+            }
         }
     }
 
@@ -85,7 +127,7 @@ const Events = (() => {
             const orcamentoEfetivado = await API.efetivarOrcamento(id);
             const orcamentoCompleto = await API.buscarOrcamentoPorId(orcamentoEfetivado.id);
 
-            UI.exibirOrcamento(orcamentoCompleto, `Orçamento ${orcamentoCompleto.id} efetivado com sucesso`);
+            UI.exibirOrcamento(orcamentoCompleto, `Orçamento ${orcamentoCompleto.id} efetivado com sucesso!`);
         } catch (error) {
             UI.mostrarMensagem(`Erro ao efetivar orçamento: ${error.message}`, true);
         }

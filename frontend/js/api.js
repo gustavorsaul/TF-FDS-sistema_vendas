@@ -8,17 +8,20 @@ const API = (() => {
         return response.json();
     }
 
-    async function criarNovoOrcamento(itens) {
+    async function criarNovoOrcamento(dadosOrcamento) {
         const response = await fetch(`http://localhost:8080/novoOrcamento`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(itens)
+            body: JSON.stringify(dadosOrcamento)
         });
+
         if (!response.ok) {
-            throw new Error("Erro ao criar orçamento");
+            const erro = await response.text();
+            throw new Error(`Erro ao criar orçamento: ${erro}`);
         }
+
         return response.json();
     }
 
@@ -37,7 +40,6 @@ const API = (() => {
         }
         return response.json();
     }
-
 
     return {
         getProdutosDisponiveis,
