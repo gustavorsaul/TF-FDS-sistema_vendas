@@ -16,9 +16,9 @@ import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
+import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoRequestDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ProdutoDTO;
 import com.bcopstein.sistvendas.dominio.modelos.OrcamentoModel;
-
 
 @RestController
 public class Controller {
@@ -41,7 +41,7 @@ public class Controller {
     @GetMapping("")
     @CrossOrigin(origins = "*")
     public String welcomeMessage(){
-        return("Bem vindo as lojas ACME");
+        return("Bem vindo às lojas ACME");
     }
 
     @GetMapping("produtosDisponiveis")
@@ -52,8 +52,8 @@ public class Controller {
 
     @PostMapping("novoOrcamento")
     @CrossOrigin(origins = "*")
-    public OrcamentoDTO novoOrcamento(@RequestBody List<ItemPedidoDTO> itens){
-        return criaOrcamento.run(itens);
+    public OrcamentoDTO novoOrcamento(@RequestBody OrcamentoRequestDTO requestDTO){
+        return criaOrcamento.run(requestDTO);
     }
 
     @GetMapping("efetivaOrcamento/{id}")
@@ -64,7 +64,7 @@ public class Controller {
 
     @GetMapping("buscaOrcamento/{id}")
     @CrossOrigin(origins = "*")
-    public OrcamentoModel buscaOrcamento(@PathVariable(value="id") long idOrcamento){
-        return buscaOrcamento.run(idOrcamento);
+    public OrcamentoDTO buscaOrcamento(@PathVariable(value="id") long idOrcamento){
+        return OrcamentoDTO.fromModel(buscaOrcamento.run(idOrcamento));
     }
 }

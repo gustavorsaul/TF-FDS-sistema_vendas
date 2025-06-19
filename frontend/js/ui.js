@@ -34,13 +34,21 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
 
-    function exibirOrcamento(orcamento, titulo = null) {
+    async function exibirOrcamento(orcamento, titulo = null) {
+        // Carregar produtos para mapear id → descrição e preço
+        const produtos = await API.getProdutosDisponiveis();
+    
         const cabecalho = titulo 
             ? `<h2>${titulo}</h2>` 
             : `<h2>Orçamento ID: ${orcamento.id}</h2>`;
-
+    
         const tabela = `
             ${cabecalho}
+            <p><strong>Cliente:</strong> ${orcamento.nomeCliente}</p>
+            <p><strong>Local:</strong> ${orcamento.estado} - ${orcamento.pais}</p>
+            <p><strong>Data Criação:</strong> ${orcamento.dataCriacao}</p>
+            <p><strong>Validade:</strong> ${orcamento.validade}</p>
+    
             <table>
                 <thead>
                     <tr>
@@ -48,37 +56,91 @@ const UI = (() => {
                         <th>Descrição</th>
                         <th>Quantidade</th>
                         <th>Preço Unitário (R$)</th>
+                        <th>Subtotal (R$)</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${orcamento.itens.map(item => {
-                        const idProduto = item.produto ? item.produto.id : item.idProduto;
-                        const descricao = item.produto ? item.produto.descricao : "-";
-                        const preco = item.produto ? item.produto.precoUnitario : 0;
-                        const quantidade = item.quantidade ?? item.qtdade;
-
+                        const idProduto = item.idProduto;
+                        const qtdade = item.qtdade;
+    
+                        const produto = produtos.find(p => p.id === idProduto);
+                        const descricao = produto ? produto.descricao : "Produto não encontrado";
+                        const preco = produto ? produto.precoUnitario : 0;
+                        const subtotal = preco * qtdade;
+    
                         return `
                             <tr>
                                 <td>${idProduto}</td>
                                 <td>${descricao}</td>
-                                <td>${quantidade}</td>
+                                <td>${qtdade}</td>
                                 <td>${preco.toFixed(2)}</td>
+                                <td>${subtotal.toFixed(2)}</td>
                             </tr>
                         `;
                     }).join('')}
                 </tbody>
             </table>
-
+    
             <p><strong>Custo Itens:</strong> R$ ${orcamento.custoItens.toFixed(2)}</p>
-            <p><strong>Imposto:</strong> R$ ${orcamento.imposto.toFixed(2)}</p>
+            <p><strong>Imposto Estadual:</strong> R$ ${orcamento.impostoEstadual.toFixed(2)}</p>
+            <p><strong>Imposto Federal:</strong> R$ ${orcamento.impostoFederal.toFixed(2)}</p>
             <p><strong>Desconto:</strong> R$ ${orcamento.desconto.toFixed(2)}</p>
             <p><strong>Custo Consumidor:</strong> R$ ${orcamento.custoConsumidor.toFixed(2)}</p>
             <p><strong>Efetivado:</strong> ${orcamento.efetivado ? 'Sim' : 'Não'}</p>
+    
+            ${botaoVoltar()}
+        `;
+    
+        document.getElementById('resultado').innerHTML = tabela;
+    }
 
+    function mostrarFormularioCriarOrcamento(produtos) {
+        const tabelaProdutos = produtos.map(prod => `
+            <tr>
+                <td>${prod.id}</td>
+                <td>${prod.descricao}</td>
+                <td>${prod.precoUnitario.toFixed(2)}</td>
+                <td><input type="number" id="qtd-${prod.id}" min="0" value="0" style="width:60px;"></td>
+            </tr>
+        `).join('');
+
+        const formulario = `
+            <h2>Criar Orçamento</h2>
+
+            <label for="nome-cliente">Nome do Cliente:</label>
+            <input type="text" id="nome-cliente" placeholder="Digite o nome">
+            <br><br>
+
+            <label for="pais">País:</label>
+            <input type="text" id="pais" placeholder="Digite o país">
+            <br><br>
+
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" placeholder="Digite o estado">
+            <br><br>
+
+            <h3>Selecione os produtos:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Preço Unitário (R$)</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tabelaProdutos}
+                </tbody>
+            </table>
+            <br>
+
+            <button class="back-button" id="btn-criar-orcamento-final">Criar Orçamento</button>
             ${botaoVoltar()}
         `;
 
-        document.getElementById('resultado').innerHTML = tabela;
+        document.getElementById('resultado').innerHTML = formulario;
     }
 
     function mostrarFormularioBuscarOrcamento() {
@@ -120,6 +182,7 @@ const UI = (() => {
         exibirProdutos,
         exibirOrcamento,
         mostrarMensagem,
+        mostrarFormularioCriarOrcamento,
         mostrarFormularioBuscarOrcamento,
         mostrarFormularioEfetivarOrcamento,
         voltarTelaInicial
