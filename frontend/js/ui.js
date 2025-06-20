@@ -35,7 +35,6 @@ const UI = (() => {
     }
 
     async function exibirOrcamento(orcamento, titulo = null) {
-        // Carregar produtos para mapear id → descrição e preço
         const produtos = await API.getProdutosDisponiveis();
     
         const cabecalho = titulo 

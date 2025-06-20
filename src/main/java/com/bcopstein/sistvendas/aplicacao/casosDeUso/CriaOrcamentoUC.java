@@ -29,7 +29,7 @@ public class CriaOrcamentoUC {
     public OrcamentoDTO run(OrcamentoRequestDTO requestDTO) {
         PedidoModel pedido = new PedidoModel(0);
 
-        // Monta a lista de itens do pedido
+        // monta a lista de itens do pedido
         for (ItemPedidoDTO item : requestDTO.getItens()) {
             ProdutoModel produto = servicoDeEstoque.produtoPorCodigo(item.getIdProduto());
             if (produto == null) {
@@ -40,7 +40,7 @@ public class CriaOrcamentoUC {
             pedido.addItem(itemPedido);
         }
 
-        // Cria o orçamento com os dados do cliente e localização
+        // cria orcamento com os dados do cliente e localizacao
         OrcamentoModel orcamento = servicoDeVendas.criaOrcamento(
                 pedido,
                 requestDTO.getNomeCliente(),
