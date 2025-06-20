@@ -25,40 +25,40 @@ public class ServicoDeVendas {
     }
 
     public OrcamentoModel criaOrcamento(PedidoModel pedido, String nomeCliente, String pais, String estado) {
-        // Validação de localização
+        // validacao de localizacao
         LocalizacaoModel localizacao = new LocalizacaoModel(pais, estado);
         if (!localizacao.localAtendido()) {
             throw new IllegalArgumentException("Localização não atendida: " + pais + "-" + estado);
         }
 
-        // Cria orçamento
+        // cria orçamento
         OrcamentoModel novoOrcamento = new OrcamentoModel();
         novoOrcamento.configurarOrcamento(nomeCliente, pais, estado);
         novoOrcamento.addItensPedido(pedido);
 
-        // Cálculo dos custos dos itens
+        // caculo dos custos dos itens
         double custoItens = novoOrcamento.getItens().stream()
                 .mapToDouble(it -> it.getProduto().getPrecoUnitario() * it.getQuantidade())
                 .sum();
         novoOrcamento.setCustoItens(custoItens);
 
-        // Cálculo de impostos
+        // calculo de impostos
         double impostoEstadual = calculaImpostoEstadual(pais, estado, custoItens);
         double impostoFederal = calculaImpostoFederal(pais, custoItens);
         novoOrcamento.setImpostoEstadual(impostoEstadual);
         novoOrcamento.setImpostoFederal(impostoFederal);
 
-        // Cálculo de descontos
+        // calculo de descontos
         double descontoPorItem = calculaDescontoPorItem(novoOrcamento.getItens());
         double descontoPorVolume = calculaDescontoPorVolume(novoOrcamento.getItens());
         double descontoTotal = descontoPorItem + descontoPorVolume;
         novoOrcamento.setDesconto(descontoTotal);
 
-        // Custo final
+        // custo final
         double custoConsumidor = custoItens + impostoEstadual + impostoFederal - descontoTotal;
         novoOrcamento.setCustoConsumidor(custoConsumidor);
 
-        // Persiste
+        // persiste
         return this.orcamentos.cadastra(novoOrcamento);
     }
 
@@ -94,10 +94,6 @@ public class ServicoDeVendas {
     public OrcamentoModel buscaOrcamento(long idOrcamento) {
         return this.orcamentos.recuperaPorId(idOrcamento);
     }
-
-    // =====================
-    // 🔥 Métodos auxiliares
-    // =====================
 
     private double calculaImpostoEstadual(String pais, String estado, double base) {
         if (pais.equalsIgnoreCase("Brasil")) {
