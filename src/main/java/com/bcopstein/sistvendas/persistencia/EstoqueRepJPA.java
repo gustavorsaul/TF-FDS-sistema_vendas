@@ -94,7 +94,7 @@ public class EstoqueRepJPA implements IEstoqueRepositorio{
                     prod,
                     qtdade,
                     0, 
-                    5 
+                    50 
             );
 
             estoque.save(item);
