@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.BuscaOrcamentoUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.CatalogoProdutosUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
@@ -19,6 +20,8 @@ import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoRequestDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ProdutoDTO;
 import com.bcopstein.sistvendas.dominio.modelos.OrcamentoModel;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class Controller {
@@ -26,16 +29,19 @@ public class Controller {
     private CriaOrcamentoUC criaOrcamento;
     private EfetivaOrcamentoUC efetivaOrcamento;
     private BuscaOrcamentoUC buscaOrcamento;
+    private CatalogoProdutosUC catalogoProdutos;
 
     @Autowired
     public Controller(ProdutosDisponiveisUC produtosDisponiveis,
                       CriaOrcamentoUC criaOrcamento,
                       EfetivaOrcamentoUC efetivaOrcamento,
-                      BuscaOrcamentoUC buscaOrcamento){
+                      BuscaOrcamentoUC buscaOrcamento,
+                      CatalogoProdutosUC catalogoProdutos){
         this.produtosDisponiveis = produtosDisponiveis;
         this.criaOrcamento = criaOrcamento;
         this.efetivaOrcamento = efetivaOrcamento;
         this.buscaOrcamento = buscaOrcamento;
+        this.catalogoProdutos = catalogoProdutos;
     }
 
     @GetMapping("")
@@ -44,6 +50,14 @@ public class Controller {
         return("Bem vindo às lojas ACME");
     }
 
+    // lista com todos os produtos catalogados
+    @GetMapping("catalogoProdutos")
+    @CrossOrigin(origins = "*")
+    public List<ProdutoDTO> catalogoProdutos() {
+        return catalogoProdutos.run();
+    }
+    
+    // lista com todos os produtos disponiveis em estoque
     @GetMapping("produtosDisponiveis")
     @CrossOrigin(origins = "*")
     public List<ProdutoDTO> produtosDisponiveis(){
