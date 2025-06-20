@@ -6,20 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bcopstein.sistvendas.aplicacao.dtos.ProdutoDTO;
+import com.bcopstein.sistvendas.dominio.persistencia.IProdutoRepositorio;
 import com.bcopstein.sistvendas.dominio.servicos.ServicoDeProduto;
 
 @Component
 public class CatalogoProdutosUC {
 
-    private ServicoDeProduto servicoProduto;
+    private ServicoDeProduto servicoDeProduto;
 
     @Autowired
-    public CatalogoProdutosUC(ServicoDeProduto servicoProduto) {
-        this.servicoProduto = servicoProduto;
+    public CatalogoProdutosUC(ServicoDeProduto servicoDeProduto) {
+        this.servicoDeProduto = servicoDeProduto;
     }
 
     public List<ProdutoDTO> run() {
-        return servicoProduto.todosProdutos().stream()
+        return servicoDeProduto.todosProdutos().stream()
             .map(p->ProdutoDTO.fromModel(p))
             .toList();
     }

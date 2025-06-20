@@ -13,8 +13,15 @@ import com.bcopstein.sistvendas.dominio.persistencia.IEstoqueRepositorio;
 @Repository
 @Primary
 public class EstoqueRepJPA implements IEstoqueRepositorio{
-    @Autowired
+    
     private EstoqueJPA_ItfRep estoque;
+    private ProdutoJPA_ItfRep produtoJpa;
+
+    @Autowired
+    public EstoqueRepJPA(EstoqueJPA_ItfRep estoque, ProdutoJPA_ItfRep produtoJpa) {
+        this.estoque = estoque;
+        this.produtoJpa = produtoJpa;
+    }
 
     @Override
     public List<ProdutoModel> todos() {
@@ -76,25 +83,41 @@ public class EstoqueRepJPA implements IEstoqueRepositorio{
         ItemDeEstoque item = this.findByProdId(codProd);
 
         if (item == null) {
-            throw new IllegalArgumentException("Produto inexistente no estoque.");
+
+            Produto prod = produtoJpa.findById(codProd);
+            if (prod == null) {
+                throw new IllegalArgumentException("Produto inexistente no catálogo");
+            }
+                
+            item = new ItemDeEstoque(
+                    codProd,
+                    prod,
+                    qtdade,
+                    0, 
+                    5 
+            );
+
+            estoque.save(item);
+        } else {
+
+            int novaQuantidade = item.getQuantidade() + qtdade;
+
+            if (novaQuantidade > item.getEstoqueMax()) {
+                throw new IllegalArgumentException("Operação excede o estoque máximo permitido.");
+            }
+
+            item.setQuantidade(novaQuantidade);
+            estoque.save(item);
         }
-
-        int novaQuantidade = item.getQuantidade() + qtdade;
-
-        if (novaQuantidade > item.getEstoqueMax()) {
-            throw new IllegalArgumentException("Operação excede o estoque máximo permitido.");
-        }
-
-        item.setQuantidade(novaQuantidade);
-        estoque.save(item);
 
         return new ItemDeEstoqueModel(
-            item.getId(),
-            Produto.toProdutoModel(item.getProduto()),
-            item.getQuantidade(),
-            item.getEstoqueMin(),
-            item.getEstoqueMax()
+                item.getId(),
+                Produto.toProdutoModel(item.getProduto()),
+                item.getQuantidade(),
+                item.getEstoqueMin(),
+                item.getEstoqueMax()
         );
     }
+
 
 }

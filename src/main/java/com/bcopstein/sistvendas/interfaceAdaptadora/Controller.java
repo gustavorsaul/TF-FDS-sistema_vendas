@@ -14,8 +14,10 @@ import com.bcopstein.sistvendas.aplicacao.casosDeUso.BuscaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CatalogoProdutosUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ChegadaEstoqueUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisCatalogoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
+import com.bcopstein.sistvendas.aplicacao.dtos.EstoqueProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoRequestDTO;
@@ -35,6 +37,7 @@ public class Controller {
     private BuscaOrcamentoUC buscaOrcamento;
     private CatalogoProdutosUC catalogoProdutos;
     private ChegadaEstoqueUC chegadaEstoque;
+    private DisponiveisCatalogoUC disponiveisCatalogo;
 
     @Autowired
     public Controller(ProdutosDisponiveisUC produtosDisponiveis,
@@ -42,13 +45,15 @@ public class Controller {
                       EfetivaOrcamentoUC efetivaOrcamento,
                       BuscaOrcamentoUC buscaOrcamento,
                       CatalogoProdutosUC catalogoProdutos,
-                      ChegadaEstoqueUC chegadaEstoque){
+                      ChegadaEstoqueUC chegadaEstoque,
+                      DisponiveisCatalogoUC disponiveisCatalogo){
         this.produtosDisponiveis = produtosDisponiveis;
         this.criaOrcamento = criaOrcamento;
         this.efetivaOrcamento = efetivaOrcamento;
         this.buscaOrcamento = buscaOrcamento;
         this.catalogoProdutos = catalogoProdutos;
         this.chegadaEstoque = chegadaEstoque;
+        this.disponiveisCatalogo = disponiveisCatalogo;
     }
 
     @GetMapping("")
@@ -95,9 +100,14 @@ public class Controller {
             return chegadaEstoque.run(item);
     }
     
+    @GetMapping("disponiveisCatalogo")
+    public List<EstoqueProdutoDTO> disponiveisCatalogo() {
+        return disponiveisCatalogo.run();
+    }
+    
+    
 
     /*
-    - Informar a chegada de produtos no estoque
     - Retornar a quantidade disponível 
         no estoque para todos os itens do catálogo
     - Retornar a quantidade disponível 
