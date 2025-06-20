@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+import com.bcopstein.sistvendas.dominio.modelos.ItemDeEstoqueModel;
 import com.bcopstein.sistvendas.dominio.modelos.ProdutoModel;
 import com.bcopstein.sistvendas.dominio.persistencia.IEstoqueRepositorio;
 
@@ -65,4 +66,35 @@ public class EstoqueRepJPA implements IEstoqueRepositorio{
                     .findFirst()
                     .orElse(null);
     }
+
+    @Override
+    public ItemDeEstoqueModel adicionaEstoque(long codProd, int qtdade) {
+        if (qtdade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser positiva");
+        }
+
+        ItemDeEstoque item = this.findByProdId(codProd);
+
+        if (item == null) {
+            throw new IllegalArgumentException("Produto inexistente no estoque.");
+        }
+
+        int novaQuantidade = item.getQuantidade() + qtdade;
+
+        if (novaQuantidade > item.getEstoqueMax()) {
+            throw new IllegalArgumentException("Operação excede o estoque máximo permitido.");
+        }
+
+        item.setQuantidade(novaQuantidade);
+        estoque.save(item);
+
+        return new ItemDeEstoqueModel(
+            item.getId(),
+            Produto.toProdutoModel(item.getProduto()),
+            item.getQuantidade(),
+            item.getEstoqueMin(),
+            item.getEstoqueMax()
+        );
+    }
+
 }

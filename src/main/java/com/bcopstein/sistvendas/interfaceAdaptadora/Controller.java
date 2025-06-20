@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.BuscaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CatalogoProdutosUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.ChegadaEstoqueUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
@@ -19,7 +20,10 @@ import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoRequestDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ProdutoDTO;
+import com.bcopstein.sistvendas.dominio.modelos.ItemDeEstoqueModel;
 import com.bcopstein.sistvendas.dominio.modelos.OrcamentoModel;
+import com.bcopstein.sistvendas.persistencia.ItemDeEstoque;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -30,18 +34,21 @@ public class Controller {
     private EfetivaOrcamentoUC efetivaOrcamento;
     private BuscaOrcamentoUC buscaOrcamento;
     private CatalogoProdutosUC catalogoProdutos;
+    private ChegadaEstoqueUC chegadaEstoque;
 
     @Autowired
     public Controller(ProdutosDisponiveisUC produtosDisponiveis,
                       CriaOrcamentoUC criaOrcamento,
                       EfetivaOrcamentoUC efetivaOrcamento,
                       BuscaOrcamentoUC buscaOrcamento,
-                      CatalogoProdutosUC catalogoProdutos){
+                      CatalogoProdutosUC catalogoProdutos,
+                      ChegadaEstoqueUC chegadaEstoque){
         this.produtosDisponiveis = produtosDisponiveis;
         this.criaOrcamento = criaOrcamento;
         this.efetivaOrcamento = efetivaOrcamento;
         this.buscaOrcamento = buscaOrcamento;
         this.catalogoProdutos = catalogoProdutos;
+        this.chegadaEstoque = chegadaEstoque;
     }
 
     @GetMapping("")
@@ -81,4 +88,24 @@ public class Controller {
     public OrcamentoDTO buscaOrcamento(@PathVariable(value="id") long idOrcamento){
         return OrcamentoDTO.fromModel(buscaOrcamento.run(idOrcamento));
     }
+
+    @PostMapping("chegadaEstoque")
+    public ItemDeEstoqueModel chegadaEstoque(
+        @RequestBody ItemPedidoDTO item) {
+            return chegadaEstoque.run(item);
+    }
+    
+
+    /*
+    - Informar a chegada de produtos no estoque
+    - Retornar a quantidade disponível 
+        no estoque para todos os itens do catálogo
+    - Retornar a quantidade disponível 
+        no estoque para uma lista de produtos informados
+    - Retornar a lista de orçamentos 
+        efetivados em um determinado período 
+        (informar data inicial e data final)
+     */
+
+
 }

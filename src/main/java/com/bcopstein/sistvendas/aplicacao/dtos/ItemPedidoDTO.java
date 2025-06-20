@@ -16,7 +16,7 @@ public class ItemPedidoDTO {
     public int getQtdade() {
         return qtdade;
     }
-
+    
     @Override
     public String toString() {
         return "ItemPedidoDTO [idProduto=" + idProduto + ", qtdade=" + qtdade + "]";

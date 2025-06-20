@@ -39,4 +39,12 @@ public class ServicoDeEstoque{
          System.out.println("--qtEstoque: "+id);
         estoque.baixaEstoque(id,qtdade);
     }  
+
+    public void entradaEstoque(long id, int qtdade){
+        if (qtdade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser positiva");
+        }
+        estoque.adicionaEstoque(id, qtdade);
+    }
+
 }
