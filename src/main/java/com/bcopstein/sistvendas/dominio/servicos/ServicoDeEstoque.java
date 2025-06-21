@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bcopstein.sistvendas.dominio.persistencia.IEstoqueRepositorio;
 import com.bcopstein.sistvendas.dominio.persistencia.IProdutoRepositorio;
+import com.bcopstein.sistvendas.dominio.modelos.ItemDeEstoqueModel;
 import com.bcopstein.sistvendas.dominio.modelos.ProdutoModel;
 
 @Service
@@ -27,7 +28,7 @@ public class ServicoDeEstoque{
     public ProdutoModel produtoPorCodigo(long id){
         return this.produtos.consultaPorId(id);
     }
-
+    
     public int qtdadeEmEstoque(long id){
         System.out.println("--qtEstoque: "+id);
         int qtde = estoque.quantidadeEmEstoque(id);
@@ -39,4 +40,8 @@ public class ServicoDeEstoque{
          System.out.println("--qtEstoque: "+id);
         estoque.baixaEstoque(id,qtdade);
     }  
+    
+    public List<ItemDeEstoqueModel> itensDeEstoque() {
+    return estoque.itensDeEstoque();
+    }
 }

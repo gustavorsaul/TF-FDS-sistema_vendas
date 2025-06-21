@@ -26,7 +26,6 @@ public class ServicoDeVendas {
     public List<ProdutoModel> produtosDisponiveis() {
         return estoque.todosComEstoque();
     }
-
     public OrcamentoModel recuperaOrcamentoPorId(long id) {
         return this.orcamentos.recuperaPorId(id);
     }
@@ -86,5 +85,8 @@ public class ServicoDeVendas {
 
     public OrcamentoModel buscaOrcamento(long idOrcamento) {
         return this.orcamentos.recuperaPorId(idOrcamento);
+    }
+    public List<OrcamentoModel> todosOrcamentos() {
+    return orcamentos.todos();
     }
 }

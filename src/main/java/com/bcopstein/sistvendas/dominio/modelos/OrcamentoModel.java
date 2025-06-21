@@ -1,5 +1,6 @@
 package com.bcopstein.sistvendas.dominio.modelos;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public class OrcamentoModel {
     private double desconto;
     private double custoConsumidor;
     private boolean efetivado;
+    private LocalDate data;
+
 
     public OrcamentoModel(long id) {
         this.id = id;
@@ -84,4 +87,11 @@ public class OrcamentoModel {
     public void efetiva(){
         efetivado = true;
     }
+    public double valorFinal() {
+    return custoItens + imposto - desconto;
+}
+    public LocalDate getData() {
+         return data;
+}
+
 }
