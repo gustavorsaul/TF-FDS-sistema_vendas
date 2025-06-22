@@ -41,10 +41,19 @@ const API = (() => {
         return response.json();
     }
 
+    async function getCatalogoProdutos() {
+        const response = await fetch(`http://localhost:8080/catalogoProdutos`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar catálogo de produtos");
+        }
+        return response.json();
+    }
+
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
         buscarOrcamentoPorId,
-        efetivarOrcamento
+        efetivarOrcamento,
+        getCatalogoProdutos
     };
 })();

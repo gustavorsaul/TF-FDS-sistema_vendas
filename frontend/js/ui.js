@@ -177,6 +177,32 @@ const UI = (() => {
         `;
     }
 
+    function exibirCatalogoProdutos(produtos) {
+        const tabela = `
+            <h2>Catálogo de Produtos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Preço Unitário (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${produtos.map(prod => `
+                        <tr>
+                            <td>${prod.id}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.precoUnitario.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -184,6 +210,7 @@ const UI = (() => {
         mostrarFormularioCriarOrcamento,
         mostrarFormularioBuscarOrcamento,
         mostrarFormularioEfetivarOrcamento,
+        exibirCatalogoProdutos,
         voltarTelaInicial
     };
 })();

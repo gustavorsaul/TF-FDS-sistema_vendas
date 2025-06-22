@@ -17,7 +17,6 @@ const Events = (() => {
                 UI.mostrarFormularioEfetivarOrcamento();
             });
 
-        // Event delegation global
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'btn-voltar') {
                 UI.voltarTelaInicial();
@@ -32,6 +31,17 @@ const Events = (() => {
                 criarOrcamento();
             }
         });
+
+        document.getElementById('btn-catalogo-produtos')
+        .addEventListener('click', async () => {
+            try {
+                const produtos = await API.getCatalogoProdutos();
+                UI.exibirCatalogoProdutos(produtos);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar catálogo: ${error.message}`, true);
+            }
+        });
+        
     }
 
     async function carregarProdutos() {
@@ -133,6 +143,7 @@ const Events = (() => {
         }
     }
 
+    
     return {
         configurarEventos
     };
