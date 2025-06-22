@@ -203,6 +203,54 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
 
+    function mostrarFormularioChegadaEstoque() {
+        const html = `
+            <h2>Chegada de Produtos no Estoque</h2>
+            <label for="input-id-produto">ID do Produto:</label><br>
+            <input type="number" id="input-id-produto" placeholder="Digite o ID do Produto"><br><br>
+    
+            <label for="input-quantidade">Quantidade:</label><br>
+            <input type="number" id="input-quantidade" placeholder="Digite a quantidade"><br><br>
+    
+            <button class="back-button" id="btn-registrar-chegada">Registrar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirChegadaEstoque(itemEstoque) {
+        const html = `
+            <h2>Estoque Atualizado</h2>
+            <p>Foram inseridos <strong>${itemEstoque.quantidade}</strong> unidades do produto <strong>${itemEstoque.produto.descricao}</strong> no estoque.</p>
+    
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Preço Unitário (R$)</th>
+                        <th>Quantidade no Estoque</th>
+                        <th>Estoque Mínimo</th>
+                        <th>Estoque Máximo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${itemEstoque.produto.id}</td>
+                        <td>${itemEstoque.produto.descricao}</td>
+                        <td>${itemEstoque.produto.precoUnitario.toFixed(2)}</td>
+                        <td>${itemEstoque.quantidade}</td>
+                        <td>${itemEstoque.estoqueMin}</td>
+                        <td>${itemEstoque.estoqueMax}</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+    
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -211,6 +259,8 @@ const UI = (() => {
         mostrarFormularioBuscarOrcamento,
         mostrarFormularioEfetivarOrcamento,
         exibirCatalogoProdutos,
-        voltarTelaInicial
+        voltarTelaInicial,
+        mostrarFormularioChegadaEstoque,
+        exibirChegadaEstoque
     };
 })();

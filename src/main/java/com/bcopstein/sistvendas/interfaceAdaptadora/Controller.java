@@ -116,6 +116,7 @@ public class Controller {
         return OrcamentoDTO.fromModel(buscaOrcamento.run(idOrcamento));
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("chegadaEstoque")
     public ItemDeEstoqueModel chegadaEstoque(
         @RequestBody ItemPedidoDTO item) {

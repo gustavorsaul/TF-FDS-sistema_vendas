@@ -41,7 +41,18 @@ const Events = (() => {
                 UI.mostrarMensagem(`Erro ao buscar catálogo: ${error.message}`, true);
             }
         });
-        
+
+        document.getElementById('btn-chegada-estoque')
+        .addEventListener('click', () => {
+            UI.mostrarFormularioChegadaEstoque();
+        });
+
+        document.addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'btn-registrar-chegada') {
+            confirmarChegadaEstoque();
+        }
+    });
+
     }
 
     async function carregarProdutos() {
@@ -143,8 +154,25 @@ const Events = (() => {
         }
     }
 
+    async function confirmarChegadaEstoque() {
+        const idProduto = document.getElementById('input-id-produto').value.trim();
+        const qtdade = document.getElementById('input-quantidade').value.trim();
     
+        if (!idProduto || !qtdade || qtdade <= 0) {
+            UI.mostrarMensagem("Por favor, insira um ID de produto e uma quantidade válida.", true);
+            return;
+        }
+    
+        try {
+            const resultado = await API.chegadaEstoque(idProduto, qtdade);
+            UI.exibirChegadaEstoque(resultado);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao registrar chegada de estoque: ${error.message}`, true);
+        }
+    }    
+
     return {
-        configurarEventos
+        configurarEventos,
+        confirmarChegadaEstoque
     };
 })();

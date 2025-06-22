@@ -49,11 +49,32 @@ const API = (() => {
         return response.json();
     }
 
+    async function chegadaEstoque(idProduto, qtdade) {
+        const body = {
+            idProduto: parseInt(idProduto),
+            qtdade: parseInt(qtdade)
+        };
+    
+        const response = await fetch(`http://localhost:8080/chegadaEstoque`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+    
+        if (!response.ok) {
+            const erro = await response.text();
+            throw new Error(`Erro ao registrar chegada de estoque: ${erro}`);
+        }
+    
+        return response.json();
+    }
+    
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
         buscarOrcamentoPorId,
         efetivarOrcamento,
-        getCatalogoProdutos
+        getCatalogoProdutos,
+        chegadaEstoque
     };
 })();
