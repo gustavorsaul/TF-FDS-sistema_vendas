@@ -15,10 +15,12 @@ import com.bcopstein.sistvendas.aplicacao.casosDeUso.CatalogoProdutosUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ChegadaEstoqueUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisCatalogoUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisProdutosInfUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.EstoqueProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
+import com.bcopstein.sistvendas.aplicacao.dtos.ListaIdProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoRequestDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ProdutoDTO;
@@ -38,6 +40,7 @@ public class Controller {
     private CatalogoProdutosUC catalogoProdutos;
     private ChegadaEstoqueUC chegadaEstoque;
     private DisponiveisCatalogoUC disponiveisCatalogo;
+    private DisponiveisProdutosInfUC disponiveisProdutosInf;
 
     @Autowired
     public Controller(ProdutosDisponiveisUC produtosDisponiveis,
@@ -46,7 +49,8 @@ public class Controller {
                       BuscaOrcamentoUC buscaOrcamento,
                       CatalogoProdutosUC catalogoProdutos,
                       ChegadaEstoqueUC chegadaEstoque,
-                      DisponiveisCatalogoUC disponiveisCatalogo){
+                      DisponiveisCatalogoUC disponiveisCatalogo,
+                      DisponiveisProdutosInfUC disponiveisProdutosInf){
         this.produtosDisponiveis = produtosDisponiveis;
         this.criaOrcamento = criaOrcamento;
         this.efetivaOrcamento = efetivaOrcamento;
@@ -54,6 +58,7 @@ public class Controller {
         this.catalogoProdutos = catalogoProdutos;
         this.chegadaEstoque = chegadaEstoque;
         this.disponiveisCatalogo = disponiveisCatalogo;
+        this.disponiveisProdutosInf = disponiveisProdutosInf;
     }
 
     @GetMapping("")
@@ -103,6 +108,11 @@ public class Controller {
     @GetMapping("disponiveisCatalogo")
     public List<EstoqueProdutoDTO> disponiveisCatalogo() {
         return disponiveisCatalogo.run();
+    }
+    
+    @PostMapping("/disponiveisInformados")
+    public List<EstoqueProdutoDTO> produtosDisponiveisLista(@RequestBody ListaIdProdutoDTO lista) {
+        return disponiveisProdutosInf.run(lista.getIdsProdutos());
     }
     
     
