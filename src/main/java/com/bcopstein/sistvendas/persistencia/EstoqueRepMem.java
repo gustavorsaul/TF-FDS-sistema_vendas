@@ -62,8 +62,36 @@ public class EstoqueRepMem implements IEstoqueRepositorio{
     }
 
     @Override
-    public List<ItemDeEstoqueModel> itensDeEstoque() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'itensDeEstoque'");
+    public ItemDeEstoqueModel adicionaEstoque(long codProd, int qtdade) {
+        if (qtdade <= 0) {
+            throw new IllegalArgumentException("Quantidade deve ser positiva");
+        }
+
+        ItemDeEstoqueModel item = itens.stream()
+                .filter(it -> it.getProduto().getId() == codProd)
+                .findAny()
+                .orElse(null);
+
+        if (item == null) {
+            ProdutoModel prod = produtos.consultaPorId(codProd);
+            if (prod == null) {
+                throw new IllegalArgumentException("Produto inexistente no catálogo");
+            }
+            // Novo item de estoque, com estoqueMin=0 e estoqueMax=Infinito (ou um padrão)
+            item = new ItemDeEstoqueModel(codProd, prod, qtdade, 0, Integer.MAX_VALUE);
+            itens.add(item);
+        } else {
+            int novaQuantidade = item.getQuantidade() + qtdade;
+
+            if (novaQuantidade > item.getEstoqueMax()) {
+                throw new IllegalArgumentException("Operação excede o estoque máximo permitido.");
+            }
+
+            item.setQuantidade(novaQuantidade);
+        }
+
+        return item;
     }
+
+
 }

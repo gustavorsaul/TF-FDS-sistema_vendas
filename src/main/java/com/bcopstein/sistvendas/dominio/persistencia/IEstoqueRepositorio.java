@@ -10,5 +10,5 @@ public interface IEstoqueRepositorio {
     List<ProdutoModel> todosComEstoque();
     int quantidadeEmEstoque(long codigo);
     int baixaEstoque(long codProd, int qtdade);
-    List<ItemDeEstoqueModel> itensDeEstoque();
+    ItemDeEstoqueModel adicionaEstoque(long codProd, int qtdade);
 }

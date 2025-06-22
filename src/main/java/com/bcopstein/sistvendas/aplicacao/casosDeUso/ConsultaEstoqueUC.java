@@ -12,9 +12,9 @@ import com.bcopstein.sistvendas.dominio.servicos.ServicoDeEstoque;
 
 @Component
 public class ConsultaEstoqueUC {
-    private final ServicoDeEstoque servicoEstoque;
+    // private final ServicoDeEstoque servicoEstoque;
 
-    @Autowired
+    /* @Autowired
     public ConsultaEstoqueUC(ServicoDeEstoque servicoEstoque) {
         this.servicoEstoque = servicoEstoque;
     }
@@ -29,5 +29,5 @@ public class ConsultaEstoqueUC {
                 item.getQuantidade()
             ))
             .collect(Collectors.toList());
-    }
+    } */
 }

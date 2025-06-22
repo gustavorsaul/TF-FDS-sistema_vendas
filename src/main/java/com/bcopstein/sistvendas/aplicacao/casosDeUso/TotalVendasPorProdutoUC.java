@@ -1,6 +1,8 @@
 package com.bcopstein.sistvendas.aplicacao.casosDeUso;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,7 +24,7 @@ public class TotalVendasPorProdutoUC {
         this.servicoVendas = servicoVendas;
     }
 
-    public List<VendasPorProdutoDTO> run(LocalDate inicio, LocalDate fim) {
+    /* public List<VendasPorProdutoDTO> run(LocalDate inicio, LocalDate fim) {
         List<OrcamentoModel> vendidos = servicoVendas.todosOrcamentos().stream()
             .filter(o -> o.isEfetivado()
                       && !o.getData().isBefore(inicio)
@@ -47,5 +49,36 @@ public class TotalVendasPorProdutoUC {
             ));
 
         return map.values().stream().toList();
+    } */
+
+    public List<VendasPorProdutoDTO> run() {
+        List<OrcamentoModel> todos = servicoVendas.todosOrcamentos();
+
+        Map<Long, VendasPorProdutoDTO> mapaVendas = new HashMap<>();
+
+        todos.stream()
+            .filter(OrcamentoModel::isEfetivado)
+            .flatMap(o -> o.getItens().stream())
+            .forEach(item -> {
+                long idProd = item.getProduto().getId();
+                String descricao = item.getProduto().getDescricao();
+                int quantidade = item.getQuantidade();
+                double subtotal = quantidade * item.getProduto().getPrecoUnitario();
+
+                mapaVendas.compute(idProd, (id, venda) -> {
+                    if (venda == null) {
+                        return new VendasPorProdutoDTO(idProd, descricao, quantidade, subtotal);
+                    } else {
+                        return new VendasPorProdutoDTO(
+                            idProd,
+                            descricao,
+                            venda.getQuantidadeVendida() + quantidade,
+                            venda.getValorTotal() + subtotal
+                        );
+                    }
+                });
+            });
+
+        return new ArrayList<>(mapaVendas.values());
     }
 }
