@@ -1,0 +1,179 @@
+/* Reset básico e tipografia */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+}
+
+/* Top Navigation */
+.topnav {
+    background-color: #0077cc;
+    color: white;
+    padding: 15px 20px;
+    font-size: 22px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Layout principal */
+.main {
+    display: flex;
+    flex: 1;
+}
+
+/* Sidebar */
+.sidenav {
+    width: 220px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.sidenav button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+}
+
+.sidenav button:hover {
+    background-color: #005fa3;
+    transform: scale(1.03);
+}
+
+/* Conteúdo principal */
+.content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* Tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+th, td {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+th {
+    background-color: #0077cc;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+    background-color: #f7f7f7;
+}
+
+/* Botão de voltar */
+.back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #ccc;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #aaa;
+    transform: scale(1.03);
+}
+
+/* Mensagens */
+p {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .sidenav {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        overflow-x: auto;
+    }
+
+    .sidenav button {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    table th, table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .topnav {
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidenav button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .topnav {
+        font-size: 18px;
+    }
+}
+
+/* Bottom Navigation */
+.bottomnav {
+    background-color: #0077cc;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+
+body {
+    padding-bottom: 50px;
+}

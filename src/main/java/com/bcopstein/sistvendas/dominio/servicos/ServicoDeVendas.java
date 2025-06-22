@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bcopstein.sistvendas.dominio.modelos.ItemPedidoModel;
+import com.bcopstein.sistvendas.dominio.modelos.LocalizacaoModel;
 import com.bcopstein.sistvendas.dominio.modelos.OrcamentoModel;
 import com.bcopstein.sistvendas.dominio.modelos.PedidoModel;
 import com.bcopstein.sistvendas.dominio.modelos.ProdutoModel;
@@ -18,75 +19,124 @@ public class ServicoDeVendas {
     private IEstoqueRepositorio estoque;
 
     @Autowired
-    public ServicoDeVendas(IOrcamentoRepositorio orcamentos,IEstoqueRepositorio estoque){
+    public ServicoDeVendas(IOrcamentoRepositorio orcamentos, IEstoqueRepositorio estoque) {
         this.orcamentos = orcamentos;
         this.estoque = estoque;
     }
-     
-    public List<ProdutoModel> produtosDisponiveis() {
-        return estoque.todosComEstoque();
-    }
-    public OrcamentoModel recuperaOrcamentoPorId(long id) {
-        return this.orcamentos.recuperaPorId(id);
-    }
 
-    public OrcamentoModel criaOrcamento(PedidoModel pedido) {
-        var novoOrcamento = new OrcamentoModel();
+    public OrcamentoModel criaOrcamento(PedidoModel pedido, String nomeCliente, String pais, String estado) {
+        // validacao de localizacao
+        LocalizacaoModel localizacao = new LocalizacaoModel(pais, estado);
+        if (!localizacao.localAtendido()) {
+            throw new IllegalArgumentException("Localização não atendida: " + pais + "-" + estado);
+        }
+
+        // cria orçamento
+        OrcamentoModel novoOrcamento = new OrcamentoModel();
+        novoOrcamento.configurarOrcamento(nomeCliente, pais, estado);
         novoOrcamento.addItensPedido(pedido);
+
+        // caculo dos custos dos itens
         double custoItens = novoOrcamento.getItens().stream()
-            .mapToDouble(it->it.getProduto().getPrecoUnitario()*it.getQuantidade())
-            .sum();
+                .mapToDouble(it -> it.getProduto().getPrecoUnitario() * it.getQuantidade())
+                .sum();
         novoOrcamento.setCustoItens(custoItens);
-        novoOrcamento.setImposto(custoItens * 0.1);
-        if (novoOrcamento.getItens().size() > 5){
-                novoOrcamento.setDesconto(custoItens * 0.05);
-            }else{
-                novoOrcamento.setDesconto(0.0);
-            }
-        novoOrcamento.setCustoConsumidor(custoItens + novoOrcamento.getImposto() - novoOrcamento.getDesconto());
+
+        // calculo de impostos
+        double impostoEstadual = calculaImpostoEstadual(pais, estado, custoItens);
+        double impostoFederal = calculaImpostoFederal(pais, custoItens);
+        novoOrcamento.setImpostoEstadual(impostoEstadual);
+        novoOrcamento.setImpostoFederal(impostoFederal);
+
+        // calculo de descontos
+        double descontoPorItem = calculaDescontoPorItem(novoOrcamento.getItens());
+        double descontoPorVolume = calculaDescontoPorVolume(novoOrcamento.getItens());
+        double descontoTotal = descontoPorItem + descontoPorVolume;
+        novoOrcamento.setDesconto(descontoTotal);
+
+        // custo final
+        double custoConsumidor = custoItens + impostoEstadual + impostoFederal - descontoTotal;
+        novoOrcamento.setCustoConsumidor(custoConsumidor);
+
+        // persiste
         return this.orcamentos.cadastra(novoOrcamento);
     }
- 
+
     public OrcamentoModel efetivaOrcamento(long id) {
-        // Recupera o orçamento
         var orcamento = this.orcamentos.recuperaPorId(id);
-        if (orcamento == null || orcamento.isEfetivado()){
+        if (orcamento == null || orcamento.isEfetivado()) {
             throw new IllegalArgumentException("Orçamento inexistente ou já efetivado");
         }
-        
+
+        if (!orcamento.estaValido()) {
+            throw new IllegalStateException("Orçamento expirado. Validade até: " + orcamento.getValidade());
+        }
+
         var ok = true;
-        // Verifica se tem quantidade em estoque para todos os itens
-        for (ItemPedidoModel itemPedido:orcamento.getItens()) {
+        for (ItemPedidoModel itemPedido : orcamento.getItens()) {
             int qtdade = estoque.quantidadeEmEstoque(itemPedido.getProduto().getId());
             if (qtdade < itemPedido.getQuantidade()) {
                 ok = false;
-                System.out.println("\n\n- semEstoque: " + itemPedido.getProduto());
-                System.out.println("\n idProd:"+itemPedido.getProduto().getId());
-                System.out.println("\n solicitado: "+itemPedido.getQuantidade());
-                System.out.println("\n estoque: "+qtdade);
                 break;
             }
         }
-        // Se tem quantidade para todos os itens, da baixa no estoque para todos
+
         if (ok) {
-            for (ItemPedidoModel itemPedido:orcamento.getItens()) {
-                int qtdade = estoque.quantidadeEmEstoque(itemPedido.getProduto().getId());
-                if (qtdade >= itemPedido.getQuantidade()) {
-                    estoque.baixaEstoque(itemPedido.getProduto().getId(), itemPedido.getQuantidade());
-                }
+            for (ItemPedidoModel itemPedido : orcamento.getItens()) {
+                estoque.baixaEstoque(itemPedido.getProduto().getId(), itemPedido.getQuantidade());
             }
-            System.out.println("\n\n- marcar efetivado: " + id);
-            // Marca o orcamento como efetivado
             orcamentos.marcaComoEfetivado(id);
         }
-        // Retorna o orçamento marcado como efetivado ou não conforme disponibilidade do estoque
+
         return orcamentos.recuperaPorId(id);
     }
 
     public OrcamentoModel buscaOrcamento(long idOrcamento) {
         return this.orcamentos.recuperaPorId(idOrcamento);
     }
+
+    private double calculaImpostoEstadual(String pais, String estado, double base) {
+        if (pais.equalsIgnoreCase("Brasil")) {
+            switch (estado.toUpperCase()) {
+                case "RS":
+                    return base * 0.10;
+                case "SP":
+                    return base * 0.12;
+                case "RJ":
+                    return base * 0.15;
+                default:
+                    return base * 0.10; // Default se não especificado
+            }
+        }
+        return base * 0.20; // Outros países
+    }
+
+    private double calculaImpostoFederal(String pais, double base) {
+        if (pais.equalsIgnoreCase("Brasil")) {
+            return base * 0.05;
+        }
+        return base * 0.10; // Outros países
+    }
+
+    private double calculaDescontoPorItem(List<ItemPedidoModel> itens) {
+        return itens.stream()
+                .filter(it -> it.getQuantidade() > 3)
+                .mapToDouble(it -> it.getProduto().getPrecoUnitario() * it.getQuantidade() * 0.05)
+                .sum();
+    }
+
+    private double calculaDescontoPorVolume(List<ItemPedidoModel> itens) {
+        int totalItens = itens.stream().mapToInt(ItemPedidoModel::getQuantidade).sum();
+        if (totalItens > 10) {
+            double valorTotal = itens.stream()
+                    .mapToDouble(it -> it.getProduto().getPrecoUnitario() * it.getQuantidade())
+                    .sum();
+            return valorTotal * 0.10;
+        }
+        return 0.0;
+    }
+
     public List<OrcamentoModel> todosOrcamentos() {
-    return orcamentos.todos();
+        return orcamentos.todos();
     }
 }

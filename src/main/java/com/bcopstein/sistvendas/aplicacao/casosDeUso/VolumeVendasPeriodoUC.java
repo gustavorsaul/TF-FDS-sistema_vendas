@@ -20,11 +20,12 @@ public class VolumeVendasPeriodoUC {
     }
 
     public double run(LocalDate inicio, LocalDate fim){
-          List<OrcamentoModel> todos = servicoDeVendas.todosOrcamentos();
+        List<OrcamentoModel> todos = servicoDeVendas.todosOrcamentos();
+
         return todos.stream()
             .filter(o -> o.isEfetivado()
-                      && !o.getData().isBefore(inicio)
-                      && !o.getData().isAfter(fim))
+            && !o.getDataCriacao().isBefore(inicio)
+            && !o.getDataCriacao().isAfter(fim))
             .mapToDouble(OrcamentoModel::valorFinal)
             .sum();
     }

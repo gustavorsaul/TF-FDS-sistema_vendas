@@ -1,5 +1,6 @@
 package com.bcopstein.sistvendas.persistencia;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,4 +84,14 @@ public class OrcamentoRepMem implements IOrcamentoRepositorio{
         }
         orcamento.efetiva();
     }
+
+    @Override
+    public List<OrcamentoModel> orcamentosEfetivadosNoPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+        return orcamentos.stream()
+                .filter(orc -> orc.isEfetivado()
+                        && !orc.getDataCriacao().isBefore(dataInicial)
+                        && !orc.getDataCriacao().isAfter(dataFinal))
+                .toList();
+    }
+
 }
