@@ -1,8 +1,10 @@
 package com.bcopstein.sistvendas.interfaceAdaptadora;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisCatalogoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisProdutosInfUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.OrcamentosEfetPeriodoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.EstoqueProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
@@ -41,6 +44,7 @@ public class Controller {
     private ChegadaEstoqueUC chegadaEstoque;
     private DisponiveisCatalogoUC disponiveisCatalogo;
     private DisponiveisProdutosInfUC disponiveisProdutosInf;
+    private OrcamentosEfetPeriodoUC orcamentosEfetPeriodo;
 
     @Autowired
     public Controller(ProdutosDisponiveisUC produtosDisponiveis,
@@ -50,7 +54,8 @@ public class Controller {
                       CatalogoProdutosUC catalogoProdutos,
                       ChegadaEstoqueUC chegadaEstoque,
                       DisponiveisCatalogoUC disponiveisCatalogo,
-                      DisponiveisProdutosInfUC disponiveisProdutosInf){
+                      DisponiveisProdutosInfUC disponiveisProdutosInf,
+                      OrcamentosEfetPeriodoUC orcamentosEfetPeriodo){
         this.produtosDisponiveis = produtosDisponiveis;
         this.criaOrcamento = criaOrcamento;
         this.efetivaOrcamento = efetivaOrcamento;
@@ -59,6 +64,7 @@ public class Controller {
         this.chegadaEstoque = chegadaEstoque;
         this.disponiveisCatalogo = disponiveisCatalogo;
         this.disponiveisProdutosInf = disponiveisProdutosInf;
+        this.orcamentosEfetPeriodo = orcamentosEfetPeriodo;
     }
 
     @GetMapping("")
@@ -115,13 +121,18 @@ public class Controller {
         return disponiveisProdutosInf.run(lista.getIdsProdutos());
     }
     
+    @GetMapping("/orcamentosEfetivadosPeriodo")
+    public List<OrcamentoDTO> orcamentosEfetiavadosPeriodo(
+        @RequestParam("dataInicial") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicial,
+        @RequestParam("dataFinal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal) {
+        
+        return orcamentosEfetPeriodo.run(dataInicial, dataFinal);
+    }
+    
+
     
 
     /*
-    - Retornar a quantidade disponível 
-        no estoque para todos os itens do catálogo
-    - Retornar a quantidade disponível 
-        no estoque para uma lista de produtos informados
     - Retornar a lista de orçamentos 
         efetivados em um determinado período 
         (informar data inicial e data final)

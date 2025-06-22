@@ -45,7 +45,7 @@ public class EstoqueRepJPA implements IEstoqueRepositorio{
         ItemDeEstoque item = this.findByProdId(codigo);
         System.out.println("item: "+item);
         if (item == null){
-            return -1;
+            return 0;
         }else{
             return item.getQuantidade();
         }

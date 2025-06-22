@@ -1,5 +1,6 @@
 package com.bcopstein.sistvendas.persistencia;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -49,5 +50,16 @@ public class OrcamentoRepJPA implements IOrcamentoRepositorio
         }
         System.out.println("\n\n- efetivado: " + id);
 
+    }
+
+    @Override
+    public List<OrcamentoModel> orcamentosEfetivadosNoPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+        return orcamentos.findAll().stream()
+            .filter(orc -> orc.isEfetivado()
+                && !orc.getDataCriacao().isBefore(dataInicial)
+                && !orc.getDataCriacao().isAfter(dataFinal)
+                )
+                .map(orc -> Orcamento.toOrcamentoModel(orc))
+                .toList();
     }
 }
