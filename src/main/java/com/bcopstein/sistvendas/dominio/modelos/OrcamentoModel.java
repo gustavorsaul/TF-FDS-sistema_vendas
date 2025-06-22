@@ -19,6 +19,8 @@ public class OrcamentoModel {
     private double desconto;
     private double custoConsumidor;
     private boolean efetivado;
+    private LocalDate data;
+
 
     public OrcamentoModel(long id) {
         this.id = id;
@@ -131,5 +133,13 @@ public class OrcamentoModel {
 
     public void efetiva() {
         efetivado = true;
+    }
+    
+    public double valorFinal() {
+        return custoItens + impostoEstadual + impostoFederal - desconto;
+    }
+
+    public LocalDate getData() {
+        return data;
     }
 }

@@ -135,4 +135,8 @@ public class ServicoDeVendas {
         }
         return 0.0;
     }
+
+    public List<OrcamentoModel> todosOrcamentos() {
+        return orcamentos.todos();
+    }
 }

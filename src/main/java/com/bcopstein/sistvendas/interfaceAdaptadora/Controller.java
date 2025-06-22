@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.BuscaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CatalogoProdutosUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ChegadaEstoqueUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.ConsultaEstoqueUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisCatalogoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisProdutosInfUC;
@@ -22,6 +24,7 @@ import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.OrcamentosEfetPeriodoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.EstoqueProdutoDTO;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.VolumeVendasPeriodoUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ListaIdProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
@@ -33,6 +36,8 @@ import com.bcopstein.sistvendas.persistencia.ItemDeEstoque;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.TotalVendasPorProdutoUC;
+import com.bcopstein.sistvendas.aplicacao.dtos.VendasPorProdutoDTO;
 
 @RestController
 public class Controller {
@@ -66,6 +71,14 @@ public class Controller {
         this.disponiveisProdutosInf = disponiveisProdutosInf;
         this.orcamentosEfetPeriodo = orcamentosEfetPeriodo;
     }
+    @Autowired
+    private ConsultaEstoqueUC consultaEstoqueUC;
+    
+    @Autowired
+    private VolumeVendasPeriodoUC volumeVendasPeriodoUC;
+
+    @Autowired
+    private TotalVendasPorProdutoUC totalVendasPorProdutoUC;
 
     @GetMapping("")
     @CrossOrigin(origins = "*")
@@ -128,4 +141,19 @@ public class Controller {
         
         return orcamentosEfetPeriodo.run(dataInicial, dataFinal);
     }
+
+    @GetMapping("/vendas/volume")
+    @CrossOrigin(origins = "*")
+    public double volumeVendasPorPeriodo(
+    @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+    @RequestParam("fim")   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim) {
+        return volumeVendasPeriodoUC.run(inicio, fim);
+    }
+
+    @GetMapping("/vendas/por-produto")
+    @CrossOrigin(origins = "*")
+    public List<VendasPorProdutoDTO> totalVendasPorProduto() {
+        return totalVendasPorProdutoUC.run();
+    }
+
 }
