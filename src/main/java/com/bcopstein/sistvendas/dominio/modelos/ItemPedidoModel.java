@@ -18,6 +18,7 @@ public class ItemPedidoModel {
 
     public long getId() { return id; }
     public void setId(long id) { this.id = id;}
+    
 
     public ProdutoModel getProduto() {
         return produto;

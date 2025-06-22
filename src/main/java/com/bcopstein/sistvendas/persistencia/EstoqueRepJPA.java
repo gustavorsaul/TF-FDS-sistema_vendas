@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
+import com.bcopstein.sistvendas.dominio.modelos.ItemDeEstoqueModel;
 import com.bcopstein.sistvendas.dominio.modelos.ProdutoModel;
 import com.bcopstein.sistvendas.dominio.persistencia.IEstoqueRepositorio;
 
@@ -64,5 +65,11 @@ public class EstoqueRepJPA implements IEstoqueRepositorio{
                     .filter(it->it.getProduto().getId()==cod)
                     .findFirst()
                     .orElse(null);
+    }
+
+    @Override
+    public List<ItemDeEstoqueModel> itensDeEstoque() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'itensDeEstoque'");
     }
 }

@@ -60,4 +60,10 @@ public class EstoqueRepMem implements IEstoqueRepositorio{
         item.setQuantidade(novaQuantidade);
         return novaQuantidade;
     }
+
+    @Override
+    public List<ItemDeEstoqueModel> itensDeEstoque() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'itensDeEstoque'");
+    }
 }
