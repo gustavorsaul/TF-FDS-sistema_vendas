@@ -128,15 +128,4 @@ public class Controller {
         
         return orcamentosEfetPeriodo.run(dataInicial, dataFinal);
     }
-    
-
-    
-
-    /*
-    - Retornar a lista de orçamentos 
-        efetivados em um determinado período 
-        (informar data inicial e data final)
-     */
-
-
 }
