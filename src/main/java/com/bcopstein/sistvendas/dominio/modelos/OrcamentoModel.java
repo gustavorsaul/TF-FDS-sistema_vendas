@@ -134,11 +134,12 @@ public class OrcamentoModel {
     public void efetiva() {
         efetivado = true;
     }
+    
     public double valorFinal() {
-    return custoItens + imposto - desconto;
-}
-    public LocalDate getData() {
-         return data;
-}
+        return custoItens + impostoEstadual + impostoFederal - desconto;
+    }
 
+    public LocalDate getData() {
+        return data;
+    }
 }

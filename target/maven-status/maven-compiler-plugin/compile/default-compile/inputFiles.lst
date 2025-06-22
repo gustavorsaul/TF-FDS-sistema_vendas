@@ -1,6 +1,7 @@
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/Produto.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/OrcamentoJPA_ItfRep.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/interfaceAdaptadora/Controller.java
+/home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/dtos/EstoqueDTO.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/modelos/ProdutoModel.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/EstoqueJPA_ItfRep.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/ProdutoRepMem.java
@@ -8,6 +9,7 @@
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/modelos/ItemDeEstoqueModel.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/ItemDeEstoque.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/modelos/LocalizacaoModel.java
+/home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/casosDeUso/ConsultaEstoqueUC.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/modelos/ItemPedidoModel.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/EstoqueRepJPA.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/persistencia/IEstoqueRepositorio.java
@@ -18,6 +20,7 @@
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/OrcamentoRepMem.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/casosDeUso/ProdutosDisponiveisUC.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/EstoqueRepMem.java
+/home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/casosDeUso/VolumeVendasPeriodoUC.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/dtos/ItemPedidoDTO.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/casosDeUso/CriaOrcamentoUC.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/servicos/ServicoDeEstoque.java
@@ -25,6 +28,8 @@
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/persistencia/IOrcamentoRepositorio.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/dtos/OrcamentoDTO.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/ProdutoRepJPA.java
+/home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/casosDeUso/TotalVendasPorProdutoUC.java
+/home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/dtos/VendasPorProdutoDTO.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/dominio/servicos/ServicoDeVendas.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/persistencia/ProdutoJPA_ItfRep.java
 /home/nvargas/Documents/matheus/TF-FDS-sistema_vendas/src/main/java/com/bcopstein/sistvendas/aplicacao/dtos/ProdutoDTO.java
