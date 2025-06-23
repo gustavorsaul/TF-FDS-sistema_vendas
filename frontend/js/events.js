@@ -62,6 +62,17 @@ const Events = (() => {
                 UI.mostrarMensagem(`Erro ao buscar produtos disponíveis no catálogo: ${error.message}`, true);
             }
         });
+
+        document.getElementById('btn-disponiveis-informados')
+        .addEventListener('click', () => {
+            UI.mostrarFormularioDisponiveisInformados();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-disponiveis') {
+                consultarDisponiveisInformados();
+            }
+        });
     }
 
     async function carregarProdutos() {
@@ -180,8 +191,35 @@ const Events = (() => {
         }
     }    
 
+    async function consultarDisponiveisInformados() {
+        const input = document.getElementById('input-ids').value.trim();
+    
+        if (!input) {
+            UI.mostrarMensagem("Por favor, insira ao menos um ID de produto.", true);
+            return;
+        }
+    
+        const ids = input.split(',')
+            .map(id => id.trim())
+            .filter(id => id !== '' && !isNaN(id))
+            .map(Number);
+    
+        if (ids.length === 0) {
+            UI.mostrarMensagem("IDs inválidos. Informe IDs separados por vírgula.", true);
+            return;
+        }
+    
+        try {
+            const produtos = await API.getDisponiveisInformados(ids);
+            UI.exibirDisponiveisInformados(produtos);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar produtos: ${error.message}`, true);
+        }
+    }
+    
     return {
         configurarEventos,
-        confirmarChegadaEstoque
+        confirmarChegadaEstoque,
+        consultarDisponiveisInformados
     };
 })();

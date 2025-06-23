@@ -278,6 +278,45 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
     
+    function mostrarFormularioDisponiveisInformados() {
+        const html = `
+            <h2>Consultar Disponibilidade por IDs</h2>
+            <label for="input-ids">Informe os IDs dos produtos separados por vírgula:</label><br>
+            <input type="text" id="input-ids" placeholder="Ex.: 10, 20, 30"><br><br>
+    
+            <button class="back-button" id="btn-consultar-disponiveis">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+    
+    function exibirDisponiveisInformados(produtos) {
+        const tabela = `
+            <h2>Produtos Consultados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade Disponível</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${produtos.map(prod => `
+                        <tr>
+                            <td>${prod.idProduto}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.quantidade}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+    
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+    
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -289,6 +328,8 @@ const UI = (() => {
         voltarTelaInicial,
         mostrarFormularioChegadaEstoque,
         exibirChegadaEstoque,
-        exibirDisponiveisCatalogo
+        exibirDisponiveisCatalogo,
+        mostrarFormularioDisponiveisInformados,
+        exibirDisponiveisInformados
     };
 })();

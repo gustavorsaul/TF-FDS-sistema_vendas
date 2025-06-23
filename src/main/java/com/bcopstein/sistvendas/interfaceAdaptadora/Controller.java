@@ -130,6 +130,7 @@ public class Controller {
     }
     
     @PostMapping("/disponiveisInformados")
+    @CrossOrigin(origins = "*")
     public List<EstoqueProdutoDTO> produtosDisponiveisLista(@RequestBody ListaIdProdutoDTO lista) {
         return disponiveisProdutosInf.run(lista.getIdsProdutos());
     }
