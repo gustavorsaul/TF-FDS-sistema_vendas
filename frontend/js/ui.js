@@ -327,6 +327,64 @@ const UI = (() => {
         `;
         document.getElementById('resultado').innerHTML = html;
     }
+
+    function mostrarFormularioOrcamentosEfetivadosPeriodo() {
+        const html = `
+            <h2>Consultar Orçamentos Efetivados por Período</h2>
+            <label for="data-inicial">Data Inicial:</label><br>
+            <input type="date" id="data-inicial"><br><br>
+
+            <label for="data-final">Data Final:</label><br>
+            <input type="date" id="data-final"><br><br>
+
+            <button class="back-button" id="btn-consultar-efetivados-periodo">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirOrcamentosEfetivadosPeriodo(orcamentos) {
+        if (orcamentos.length === 0) {
+            document.getElementById('resultado').innerHTML = `
+                <h2>Orçamentos Efetivados no Período</h2>
+                <p>Nenhum orçamento efetivado encontrado nesse período.</p>
+                ${botaoVoltar()}
+            `;
+            return;
+        }
+
+        const tabela = `
+            <h2>Orçamentos Efetivados no Período</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Localização</th>
+                        <th>Data Criação</th>
+                        <th>Validade</th>
+                        <th>Custo Consumidor (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orcamentos.map(o => `
+                        <tr>
+                            <td>${o.id}</td>
+                            <td>${o.nomeCliente}</td>
+                            <td>${o.estado} - ${o.pais}</td>
+                            <td>${o.dataCriacao}</td>
+                            <td>${o.validade}</td>
+                            <td>${o.custoConsumidor.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
     
     return {
         exibirProdutos,
@@ -342,6 +400,8 @@ const UI = (() => {
         exibirDisponiveisCatalogo,
         mostrarFormularioDisponiveisInformados,
         exibirDisponiveisInformados,
-        exibirTaxaConversao
+        exibirTaxaConversao,
+        mostrarFormularioOrcamentosEfetivadosPeriodo,
+        exibirOrcamentosEfetivadosPeriodo
     };
 })();

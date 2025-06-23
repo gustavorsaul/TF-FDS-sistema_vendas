@@ -83,6 +83,17 @@ const Events = (() => {
                 UI.mostrarMensagem(`Erro ao buscar taxa de conversão: ${error.message}`, true);
             }
         });
+
+        document.getElementById('btn-efetivados-periodo')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioOrcamentosEfetivadosPeriodo();
+            });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-efetivados-periodo') {
+                consultarOrcamentosEfetivadosPeriodo();
+            }
+        });
     }
 
     async function carregarProdutos() {
@@ -226,10 +237,29 @@ const Events = (() => {
             UI.mostrarMensagem(`Erro ao buscar produtos: ${error.message}`, true);
         }
     }
+
+    async function consultarOrcamentosEfetivadosPeriodo() {
+        const dataInicial = document.getElementById('data-inicial').value;
+        const dataFinal = document.getElementById('data-final').value;
+
+        if (!dataInicial || !dataFinal) {
+            UI.mostrarMensagem("Por favor, preencha ambas as datas.", true);
+            return;
+        }
+
+        try {
+            const orcamentos = await API.getOrcamentosEfetivadosPeriodo(dataInicial, dataFinal);
+            UI.exibirOrcamentosEfetivadosPeriodo(orcamentos);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar orçamentos: ${error.message}`, true);
+        }
+    }
+
     
     return {
         configurarEventos,
         confirmarChegadaEstoque,
-        consultarDisponiveisInformados
+        consultarDisponiveisInformados,
+        consultarOrcamentosEfetivadosPeriodo
     };
 })();

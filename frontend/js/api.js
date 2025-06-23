@@ -95,7 +95,16 @@ const API = (() => {
         return response.json();
     }
     
-    
+    async function getOrcamentosEfetivadosPeriodo(dataInicial, dataFinal) {
+        const url = `http://localhost:8080/orcamentosEfetivadosPeriodo?dataInicial=${dataInicial}&dataFinal=${dataFinal}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar orçamentos efetivados no período");
+        }
+        return response.json();
+    }
+
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
@@ -105,6 +114,7 @@ const API = (() => {
         chegadaEstoque,
         getDisponiveisCatalogo,
         getDisponiveisInformados,
-        getTaxaConversao
+        getTaxaConversao,
+        getOrcamentosEfetivadosPeriodo
     };
 })();

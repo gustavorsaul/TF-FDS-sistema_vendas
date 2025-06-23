@@ -136,6 +136,7 @@ public class Controller {
     }
     
     @GetMapping("/orcamentosEfetivadosPeriodo")
+    @CrossOrigin(origins = "*")
     public List<OrcamentoDTO> orcamentosEfetiavadosPeriodo(
         @RequestParam("dataInicial") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicial,
         @RequestParam("dataFinal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal) {
