@@ -115,6 +115,18 @@ const Events = (() => {
                 UI.mostrarMensagem(`Erro ao buscar vendas por produto: ${error.message}`, true);
             }
         });
+
+        document.getElementById('btn-perfil-compras')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioPerfilCompras();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-perfil-compras') {
+                consultarPerfilCompras();
+            }
+        });
+
     }
 
     async function carregarProdutos() {
@@ -293,11 +305,28 @@ const Events = (() => {
         }
     }
 
+    async function consultarPerfilCompras() {
+        const nomeCliente = document.getElementById('nome-cliente-perfil-compras').value.trim();
+
+        if (!nomeCliente) {
+            UI.mostrarMensagem("Por favor, insira o nome do cliente.", true);
+            return;
+        }
+
+        try {
+            const perfil = await API.getPerfilCompras(nomeCliente);
+            UI.exibirPerfilCompras(perfil);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar perfil de compras: ${error.message}`, true);
+        }
+    }
+
     return {
         configurarEventos,
         confirmarChegadaEstoque,
         consultarDisponiveisInformados,
         consultarOrcamentosEfetivadosPeriodo,
-        consultarVolumeVendasPeriodo
+        consultarVolumeVendasPeriodo,
+        consultarPerfilCompras
     };
 })();

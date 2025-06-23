@@ -123,6 +123,17 @@ const API = (() => {
         return response.json();
     }
 
+    async function getPerfilCompras(nomeCliente) {
+        const url = `http://localhost:8080/perfilCompras/${encodeURIComponent(nomeCliente)}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar perfil de compras");
+        }
+        return response.json();
+    }
+
+
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
@@ -135,6 +146,7 @@ const API = (() => {
         getTaxaConversao,
         getOrcamentosEfetivadosPeriodo,
         getVolumeVendasPeriodo,
-        getVendasPorProduto
+        getVendasPorProduto,
+        getPerfilCompras
     };
 })();

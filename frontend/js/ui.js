@@ -440,6 +440,52 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
 
+    function mostrarFormularioPerfilCompras() {
+        const html = `
+            <h2>Consultar Perfil de Compras do Cliente</h2>
+            <label for="nome-cliente-perfil-compras">Nome do Cliente:</label><br>
+            <input type="text" id="nome-cliente-perfil-compras" placeholder="Digite o nome do cliente"><br><br>
+
+            <button class="back-button" id="btn-consultar-perfil-compras">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirPerfilCompras(perfil) {
+        const tabela = `
+            <h2>Perfil de Compras - ${perfil.nomeCliente}</h2>
+            <p><strong>Total Gasto:</strong> R$ ${perfil.totalGasto.toFixed(2)}</p>
+            <p><strong>Quantidade de Compras:</strong> ${perfil.quantidadeCompras}</p>
+
+            <h3>Produtos Comprados:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Valor Total (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${perfil.produtosComprados.map(prod => `
+                        <tr>
+                            <td>${prod.produtoId}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.quantidade}</td>
+                            <td>${prod.valorTotal.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+
+            ${botaoVoltar()}
+        `;
+
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -459,6 +505,8 @@ const UI = (() => {
         exibirOrcamentosEfetivadosPeriodo,
         mostrarFormularioVolumeVendasPeriodo,
         exibirVolumeVendasPeriodo,
-        exibirVendasPorProduto
+        exibirVendasPorProduto,
+        mostrarFormularioPerfilCompras,
+        exibirPerfilCompras
     };
 })();
