@@ -127,6 +127,16 @@ const Events = (() => {
             }
         });
 
+        document.getElementById('btn-clientes-mais-compraram')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioClientesMaisCompraram();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-clientes-mais-compraram') {
+                consultarClientesMaisCompraram();
+            }
+        });
     }
 
     async function carregarProdutos() {
@@ -321,12 +331,30 @@ const Events = (() => {
         }
     }
 
+    async function consultarClientesMaisCompraram() {
+        const dataInicio = document.getElementById('data-inicio-clientes').value;
+        const dataFim = document.getElementById('data-fim-clientes').value;
+
+        if (!dataInicio || !dataFim) {
+            UI.mostrarMensagem("Por favor, preencha ambas as datas.", true);
+            return;
+        }
+
+        try {
+            const relatorio = await API.getClientesMaisCompraram(dataInicio, dataFim);
+            UI.exibirRelatorioClientesMaisCompraram(relatorio, dataInicio, dataFim);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar relatório: ${error.message}`, true);
+        }
+    }
+
     return {
         configurarEventos,
         confirmarChegadaEstoque,
         consultarDisponiveisInformados,
         consultarOrcamentosEfetivadosPeriodo,
         consultarVolumeVendasPeriodo,
-        consultarPerfilCompras
+        consultarPerfilCompras,
+        consultarClientesMaisCompraram
     };
 })();

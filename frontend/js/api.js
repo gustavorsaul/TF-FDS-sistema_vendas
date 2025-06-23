@@ -133,6 +133,15 @@ const API = (() => {
         return response.json();
     }
 
+    async function getClientesMaisCompraram(dataInicio, dataFim) {
+        const url = `http://localhost:8080/relatorio/clientes-mais-compraram?inicio=${dataInicio}&fim=${dataFim}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar relatório de clientes que mais compraram");
+        }
+        return response.text(); // resposta é texto puro
+    }
 
     return {
         getProdutosDisponiveis,
@@ -147,6 +156,7 @@ const API = (() => {
         getOrcamentosEfetivadosPeriodo,
         getVolumeVendasPeriodo,
         getVendasPorProduto,
-        getPerfilCompras
+        getPerfilCompras,
+        getClientesMaisCompraram
     };
 })();

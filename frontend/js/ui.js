@@ -486,6 +486,35 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
 
+    function mostrarFormularioClientesMaisCompraram() {
+        const html = `
+            <h2>Relatório - Clientes que Mais Compraram</h2>
+            <label for="data-inicio-clientes">Data Inicial:</label><br>
+            <input type="date" id="data-inicio-clientes"><br><br>
+
+            <label for="data-fim-clientes">Data Final:</label><br>
+            <input type="date" id="data-fim-clientes"><br><br>
+
+            <button class="back-button" id="btn-consultar-clientes-mais-compraram">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirRelatorioClientesMaisCompraram(relatorio, dataInicio, dataFim) {
+        const html = `
+            <h2>Clientes que Mais Compraram</h2>
+            <p>Período de <strong>${dataInicio}</strong> até <strong>${dataFim}</strong></p>
+
+            <pre style="background-color: #f4f4f4; padding: 15px; border-radius: 8px;">
+    ${relatorio}
+            </pre>
+
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -507,6 +536,8 @@ const UI = (() => {
         exibirVolumeVendasPeriodo,
         exibirVendasPorProduto,
         mostrarFormularioPerfilCompras,
-        exibirPerfilCompras
+        exibirPerfilCompras,
+        mostrarFormularioClientesMaisCompraram,
+        exibirRelatorioClientesMaisCompraram
     };
 })();
