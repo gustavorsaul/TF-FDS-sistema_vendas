@@ -68,13 +68,22 @@ const API = (() => {
     
         return response.json();
     }
-    
+
+    async function getDisponiveisCatalogo() {
+        const response = await fetch(`http://localhost:8080/disponiveisCatalogo`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar produtos disponíveis no catálogo");
+        }
+        return response.json();
+    }
+        
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
         buscarOrcamentoPorId,
         efetivarOrcamento,
         getCatalogoProdutos,
-        chegadaEstoque
+        chegadaEstoque,
+        getDisponiveisCatalogo
     };
 })();

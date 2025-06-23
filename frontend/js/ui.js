@@ -251,6 +251,33 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = html;
     }
     
+    function exibirDisponiveisCatalogo(produtos) {
+        const tabela = `
+            <h2>Produtos Disponíveis no Catálogo</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade Disponível</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${produtos.map(prod => `
+                        <tr>
+                            <td>${prod.idProduto}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.quantidade}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+    
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+    
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -261,6 +288,7 @@ const UI = (() => {
         exibirCatalogoProdutos,
         voltarTelaInicial,
         mostrarFormularioChegadaEstoque,
-        exibirChegadaEstoque
+        exibirChegadaEstoque,
+        exibirDisponiveisCatalogo
     };
 })();

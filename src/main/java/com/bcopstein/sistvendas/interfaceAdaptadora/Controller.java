@@ -124,6 +124,7 @@ public class Controller {
     }
     
     @GetMapping("disponiveisCatalogo")
+    @CrossOrigin(origins = "*")
     public List<EstoqueProdutoDTO> disponiveisCatalogo() {
         return disponiveisCatalogo.run();
     }

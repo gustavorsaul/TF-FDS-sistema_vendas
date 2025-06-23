@@ -51,8 +51,17 @@ const Events = (() => {
         if (e.target && e.target.id === 'btn-registrar-chegada') {
             confirmarChegadaEstoque();
         }
-    });
+        });
 
+        document.getElementById('btn-disponiveis-catalogo')
+        .addEventListener('click', async () => {
+            try {
+                const produtos = await API.getDisponiveisCatalogo();
+                UI.exibirDisponiveisCatalogo(produtos);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar produtos disponíveis no catálogo: ${error.message}`, true);
+            }
+        });
     }
 
     async function carregarProdutos() {
