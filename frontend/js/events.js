@@ -94,6 +94,17 @@ const Events = (() => {
                 consultarOrcamentosEfetivadosPeriodo();
             }
         });
+
+        document.getElementById('btn-volume-vendas-periodo')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioVolumeVendasPeriodo();
+            });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-volume-vendas') {
+                consultarVolumeVendasPeriodo();
+            }
+        });
     }
 
     async function carregarProdutos() {
@@ -255,11 +266,28 @@ const Events = (() => {
         }
     }
 
-    
+    async function consultarVolumeVendasPeriodo() {
+        const dataInicio = document.getElementById('data-inicio-volume').value;
+        const dataFim = document.getElementById('data-fim-volume').value;
+
+        if (!dataInicio || !dataFim) {
+            UI.mostrarMensagem("Por favor, preencha ambas as datas.", true);
+            return;
+        }
+
+        try {
+            const volume = await API.getVolumeVendasPeriodo(dataInicio, dataFim);
+            UI.exibirVolumeVendasPeriodo(volume, dataInicio, dataFim);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar volume de vendas: ${error.message}`, true);
+        }
+    }
+
     return {
         configurarEventos,
         confirmarChegadaEstoque,
         consultarDisponiveisInformados,
-        consultarOrcamentosEfetivadosPeriodo
+        consultarOrcamentosEfetivadosPeriodo,
+        consultarVolumeVendasPeriodo
     };
 })();

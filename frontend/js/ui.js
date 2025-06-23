@@ -385,7 +385,32 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
 
-    
+    function mostrarFormularioVolumeVendasPeriodo() {
+        const html = `
+            <h2>Consultar Volume Total de Vendas por Período</h2>
+            <label for="data-inicio-volume">Data Inicial:</label><br>
+            <input type="date" id="data-inicio-volume"><br><br>
+
+            <label for="data-fim-volume">Data Final:</label><br>
+            <input type="date" id="data-fim-volume"><br><br>
+
+            <button class="back-button" id="btn-consultar-volume-vendas">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirVolumeVendasPeriodo(volume, dataInicio, dataFim) {
+        const html = `
+            <h2>Volume Total de Vendas no Período</h2>
+            <p>O volume total de vendas entre <strong>${dataInicio}</strong> e <strong>${dataFim}</strong> foi de:</p>
+            <h3 style="color:green;">R$ ${volume.toFixed(2)}</h3>
+
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -402,6 +427,8 @@ const UI = (() => {
         exibirDisponiveisInformados,
         exibirTaxaConversao,
         mostrarFormularioOrcamentosEfetivadosPeriodo,
-        exibirOrcamentosEfetivadosPeriodo
+        exibirOrcamentosEfetivadosPeriodo,
+        mostrarFormularioVolumeVendasPeriodo,
+        exibirVolumeVendasPeriodo
     };
 })();

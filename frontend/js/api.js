@@ -105,6 +105,17 @@ const API = (() => {
         return response.json();
     }
 
+    async function getVolumeVendasPeriodo(dataInicio, dataFim) {
+        const url = `http://localhost:8080/vendas/volume?inicio=${dataInicio}&fim=${dataFim}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o volume de vendas no período");
+        }
+        return response.json();
+    }
+
+
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
@@ -115,6 +126,7 @@ const API = (() => {
         getDisponiveisCatalogo,
         getDisponiveisInformados,
         getTaxaConversao,
-        getOrcamentosEfetivadosPeriodo
+        getOrcamentosEfetivadosPeriodo,
+        getVolumeVendasPeriodo
     };
 })();
