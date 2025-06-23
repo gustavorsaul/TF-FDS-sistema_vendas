@@ -317,6 +317,17 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = tabela;
     }
     
+    function exibirTaxaConversao(dados) {
+        const html = `
+            <h2>Taxa de Conversão de Orçamentos</h2>
+            <p><strong>Total de Orçamentos:</strong> ${dados.totalOrcamentos}</p>
+            <p><strong>Orçamentos Efetivados:</strong> ${dados.efetivados}</p>
+            <p><strong>Taxa de Conversão:</strong> ${dados.taxaConversao.toFixed(2)}%</p>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+    
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -330,6 +341,7 @@ const UI = (() => {
         exibirChegadaEstoque,
         exibirDisponiveisCatalogo,
         mostrarFormularioDisponiveisInformados,
-        exibirDisponiveisInformados
+        exibirDisponiveisInformados,
+        exibirTaxaConversao
     };
 })();

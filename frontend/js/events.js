@@ -73,6 +73,16 @@ const Events = (() => {
                 consultarDisponiveisInformados();
             }
         });
+
+        document.getElementById('btn-taxa-conversao')
+        .addEventListener('click', async () => {
+            try {
+                const dados = await API.getTaxaConversao();
+                UI.exibirTaxaConversao(dados);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar taxa de conversão: ${error.message}`, true);
+            }
+        });
     }
 
     async function carregarProdutos() {
