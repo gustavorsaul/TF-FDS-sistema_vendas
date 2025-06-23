@@ -87,7 +87,7 @@ const Events = (() => {
         document.getElementById('btn-efetivados-periodo')
             .addEventListener('click', () => {
                 UI.mostrarFormularioOrcamentosEfetivadosPeriodo();
-            });
+        });
         
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'btn-consultar-efetivados-periodo') {
@@ -98,11 +98,21 @@ const Events = (() => {
         document.getElementById('btn-volume-vendas-periodo')
             .addEventListener('click', () => {
                 UI.mostrarFormularioVolumeVendasPeriodo();
-            });
+        });
         
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'btn-consultar-volume-vendas') {
                 consultarVolumeVendasPeriodo();
+            }
+        });
+
+        document.getElementById('btn-vendas-por-produto')
+            .addEventListener('click', async () => {
+            try {
+                const vendas = await API.getVendasPorProduto();
+                UI.exibirVendasPorProduto(vendas);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar vendas por produto: ${error.message}`, true);
             }
         });
     }

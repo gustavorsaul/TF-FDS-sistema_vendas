@@ -411,6 +411,35 @@ const UI = (() => {
         document.getElementById('resultado').innerHTML = html;
     }
 
+    function exibirVendasPorProduto(vendas) {
+        const tabela = `
+            <h2>Total de Vendas por Produto</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade Vendida</th>
+                        <th>Valor Total (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${vendas.map(venda => `
+                        <tr>
+                            <td>${venda.produtoId}</td>
+                            <td>${venda.descricao}</td>
+                            <td>${venda.quantidadeVendida}</td>
+                            <td>${venda.valorTotal.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -429,6 +458,7 @@ const UI = (() => {
         mostrarFormularioOrcamentosEfetivadosPeriodo,
         exibirOrcamentosEfetivadosPeriodo,
         mostrarFormularioVolumeVendasPeriodo,
-        exibirVolumeVendasPeriodo
+        exibirVolumeVendasPeriodo,
+        exibirVendasPorProduto
     };
 })();

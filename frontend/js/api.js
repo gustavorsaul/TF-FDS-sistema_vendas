@@ -115,6 +115,13 @@ const API = (() => {
         return response.json();
     }
 
+    async function getVendasPorProduto() {
+        const response = await fetch(`http://localhost:8080/vendas/por-produto`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar vendas por produto");
+        }
+        return response.json();
+    }
 
     return {
         getProdutosDisponiveis,
@@ -127,6 +134,7 @@ const API = (() => {
         getDisponiveisInformados,
         getTaxaConversao,
         getOrcamentosEfetivadosPeriodo,
-        getVolumeVendasPeriodo
+        getVolumeVendasPeriodo,
+        getVendasPorProduto
     };
 })();
