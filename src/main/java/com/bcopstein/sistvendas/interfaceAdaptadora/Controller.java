@@ -116,6 +116,7 @@ public class Controller {
         return OrcamentoDTO.fromModel(buscaOrcamento.run(idOrcamento));
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("chegadaEstoque")
     public ItemDeEstoqueModel chegadaEstoque(
         @RequestBody ItemPedidoDTO item) {
@@ -123,11 +124,13 @@ public class Controller {
     }
     
     @GetMapping("disponiveisCatalogo")
+    @CrossOrigin(origins = "*")
     public List<EstoqueProdutoDTO> disponiveisCatalogo() {
         return disponiveisCatalogo.run();
     }
     
     @PostMapping("/disponiveisInformados")
+    @CrossOrigin(origins = "*")
     public List<EstoqueProdutoDTO> produtosDisponiveisLista(@RequestBody ListaIdProdutoDTO lista) {
         return disponiveisProdutosInf.run(lista.getIdsProdutos());
     }

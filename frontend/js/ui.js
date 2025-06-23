@@ -177,6 +177,157 @@ const UI = (() => {
         `;
     }
 
+    function exibirCatalogoProdutos(produtos) {
+        const tabela = `
+            <h2>Catálogo de Produtos</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Preço Unitário (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${produtos.map(prod => `
+                        <tr>
+                            <td>${prod.id}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.precoUnitario.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
+    function mostrarFormularioChegadaEstoque() {
+        const html = `
+            <h2>Chegada de Produtos no Estoque</h2>
+            <label for="input-id-produto">ID do Produto:</label><br>
+            <input type="number" id="input-id-produto" placeholder="Digite o ID do Produto"><br><br>
+    
+            <label for="input-quantidade">Quantidade:</label><br>
+            <input type="number" id="input-quantidade" placeholder="Digite a quantidade"><br><br>
+    
+            <button class="back-button" id="btn-registrar-chegada">Registrar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirChegadaEstoque(itemEstoque) {
+        const html = `
+            <h2>Estoque Atualizado</h2>
+            <p>Foram inseridos <strong>${itemEstoque.quantidade}</strong> unidades do produto <strong>${itemEstoque.produto.descricao}</strong> no estoque.</p>
+    
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Preço Unitário (R$)</th>
+                        <th>Quantidade no Estoque</th>
+                        <th>Estoque Mínimo</th>
+                        <th>Estoque Máximo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${itemEstoque.produto.id}</td>
+                        <td>${itemEstoque.produto.descricao}</td>
+                        <td>${itemEstoque.produto.precoUnitario.toFixed(2)}</td>
+                        <td>${itemEstoque.quantidade}</td>
+                        <td>${itemEstoque.estoqueMin}</td>
+                        <td>${itemEstoque.estoqueMax}</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+    
+    function exibirDisponiveisCatalogo(produtos) {
+        const tabela = `
+            <h2>Produtos Disponíveis no Catálogo</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade Disponível</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${produtos.map(prod => `
+                        <tr>
+                            <td>${prod.idProduto}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.quantidade}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+    
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+    
+    function mostrarFormularioDisponiveisInformados() {
+        const html = `
+            <h2>Consultar Disponibilidade por IDs</h2>
+            <label for="input-ids">Informe os IDs dos produtos separados por vírgula:</label><br>
+            <input type="text" id="input-ids" placeholder="Ex.: 10, 20, 30"><br><br>
+    
+            <button class="back-button" id="btn-consultar-disponiveis">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+    
+    function exibirDisponiveisInformados(produtos) {
+        const tabela = `
+            <h2>Produtos Consultados</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade Disponível</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${produtos.map(prod => `
+                        <tr>
+                            <td>${prod.idProduto}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.quantidade}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+    
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+    
+    function exibirTaxaConversao(dados) {
+        const html = `
+            <h2>Taxa de Conversão de Orçamentos</h2>
+            <p><strong>Total de Orçamentos:</strong> ${dados.totalOrcamentos}</p>
+            <p><strong>Orçamentos Efetivados:</strong> ${dados.efetivados}</p>
+            <p><strong>Taxa de Conversão:</strong> ${dados.taxaConversao.toFixed(2)}%</p>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+    
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -184,6 +335,13 @@ const UI = (() => {
         mostrarFormularioCriarOrcamento,
         mostrarFormularioBuscarOrcamento,
         mostrarFormularioEfetivarOrcamento,
-        voltarTelaInicial
+        exibirCatalogoProdutos,
+        voltarTelaInicial,
+        mostrarFormularioChegadaEstoque,
+        exibirChegadaEstoque,
+        exibirDisponiveisCatalogo,
+        mostrarFormularioDisponiveisInformados,
+        exibirDisponiveisInformados,
+        exibirTaxaConversao
     };
 })();
