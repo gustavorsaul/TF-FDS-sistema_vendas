@@ -83,6 +83,60 @@ const Events = (() => {
                 UI.mostrarMensagem(`Erro ao buscar taxa de conversão: ${error.message}`, true);
             }
         });
+
+        document.getElementById('btn-efetivados-periodo')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioOrcamentosEfetivadosPeriodo();
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-efetivados-periodo') {
+                consultarOrcamentosEfetivadosPeriodo();
+            }
+        });
+
+        document.getElementById('btn-volume-vendas-periodo')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioVolumeVendasPeriodo();
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-volume-vendas') {
+                consultarVolumeVendasPeriodo();
+            }
+        });
+
+        document.getElementById('btn-vendas-por-produto')
+            .addEventListener('click', async () => {
+            try {
+                const vendas = await API.getVendasPorProduto();
+                UI.exibirVendasPorProduto(vendas);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar vendas por produto: ${error.message}`, true);
+            }
+        });
+
+        document.getElementById('btn-perfil-compras')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioPerfilCompras();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-perfil-compras') {
+                consultarPerfilCompras();
+            }
+        });
+
+        document.getElementById('btn-clientes-mais-compraram')
+            .addEventListener('click', () => {
+                UI.mostrarFormularioClientesMaisCompraram();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-clientes-mais-compraram') {
+                consultarClientesMaisCompraram();
+            }
+        });
     }
 
     async function carregarProdutos() {
@@ -226,10 +280,81 @@ const Events = (() => {
             UI.mostrarMensagem(`Erro ao buscar produtos: ${error.message}`, true);
         }
     }
-    
+
+    async function consultarOrcamentosEfetivadosPeriodo() {
+        const dataInicial = document.getElementById('data-inicial').value;
+        const dataFinal = document.getElementById('data-final').value;
+
+        if (!dataInicial || !dataFinal) {
+            UI.mostrarMensagem("Por favor, preencha ambas as datas.", true);
+            return;
+        }
+
+        try {
+            const orcamentos = await API.getOrcamentosEfetivadosPeriodo(dataInicial, dataFinal);
+            UI.exibirOrcamentosEfetivadosPeriodo(orcamentos);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar orçamentos: ${error.message}`, true);
+        }
+    }
+
+    async function consultarVolumeVendasPeriodo() {
+        const dataInicio = document.getElementById('data-inicio-volume').value;
+        const dataFim = document.getElementById('data-fim-volume').value;
+
+        if (!dataInicio || !dataFim) {
+            UI.mostrarMensagem("Por favor, preencha ambas as datas.", true);
+            return;
+        }
+
+        try {
+            const volume = await API.getVolumeVendasPeriodo(dataInicio, dataFim);
+            UI.exibirVolumeVendasPeriodo(volume, dataInicio, dataFim);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar volume de vendas: ${error.message}`, true);
+        }
+    }
+
+    async function consultarPerfilCompras() {
+        const nomeCliente = document.getElementById('nome-cliente-perfil-compras').value.trim();
+
+        if (!nomeCliente) {
+            UI.mostrarMensagem("Por favor, insira o nome do cliente.", true);
+            return;
+        }
+
+        try {
+            const perfil = await API.getPerfilCompras(nomeCliente);
+            UI.exibirPerfilCompras(perfil);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar perfil de compras: ${error.message}`, true);
+        }
+    }
+
+    async function consultarClientesMaisCompraram() {
+        const dataInicio = document.getElementById('data-inicio-clientes').value;
+        const dataFim = document.getElementById('data-fim-clientes').value;
+
+        if (!dataInicio || !dataFim) {
+            UI.mostrarMensagem("Por favor, preencha ambas as datas.", true);
+            return;
+        }
+
+        try {
+            const relatorio = await API.getClientesMaisCompraram(dataInicio, dataFim);
+            UI.exibirRelatorioClientesMaisCompraram(relatorio, dataInicio, dataFim);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar relatório: ${error.message}`, true);
+        }
+    }
+
     return {
         configurarEventos,
         confirmarChegadaEstoque,
-        consultarDisponiveisInformados
+        consultarDisponiveisInformados,
+        consultarOrcamentosEfetivadosPeriodo,
+        consultarVolumeVendasPeriodo,
+        consultarPerfilCompras,
+        consultarClientesMaisCompraram
     };
 })();

@@ -327,7 +327,194 @@ const UI = (() => {
         `;
         document.getElementById('resultado').innerHTML = html;
     }
-    
+
+    function mostrarFormularioOrcamentosEfetivadosPeriodo() {
+        const html = `
+            <h2>Consultar Orçamentos Efetivados por Período</h2>
+            <label for="data-inicial">Data Inicial:</label><br>
+            <input type="date" id="data-inicial"><br><br>
+
+            <label for="data-final">Data Final:</label><br>
+            <input type="date" id="data-final"><br><br>
+
+            <button class="back-button" id="btn-consultar-efetivados-periodo">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirOrcamentosEfetivadosPeriodo(orcamentos) {
+        if (orcamentos.length === 0) {
+            document.getElementById('resultado').innerHTML = `
+                <h2>Orçamentos Efetivados no Período</h2>
+                <p>Nenhum orçamento efetivado encontrado nesse período.</p>
+                ${botaoVoltar()}
+            `;
+            return;
+        }
+
+        const tabela = `
+            <h2>Orçamentos Efetivados no Período</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Localização</th>
+                        <th>Data Criação</th>
+                        <th>Validade</th>
+                        <th>Custo Consumidor (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orcamentos.map(o => `
+                        <tr>
+                            <td>${o.id}</td>
+                            <td>${o.nomeCliente}</td>
+                            <td>${o.estado} - ${o.pais}</td>
+                            <td>${o.dataCriacao}</td>
+                            <td>${o.validade}</td>
+                            <td>${o.custoConsumidor.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
+    function mostrarFormularioVolumeVendasPeriodo() {
+        const html = `
+            <h2>Consultar Volume Total de Vendas por Período</h2>
+            <label for="data-inicio-volume">Data Inicial:</label><br>
+            <input type="date" id="data-inicio-volume"><br><br>
+
+            <label for="data-fim-volume">Data Final:</label><br>
+            <input type="date" id="data-fim-volume"><br><br>
+
+            <button class="back-button" id="btn-consultar-volume-vendas">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirVolumeVendasPeriodo(volume, dataInicio, dataFim) {
+        const html = `
+            <h2>Volume Total de Vendas no Período</h2>
+            <p>O volume total de vendas entre <strong>${dataInicio}</strong> e <strong>${dataFim}</strong> foi de:</p>
+            <h3 style="color:green;">R$ ${volume.toFixed(2)}</h3>
+
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirVendasPorProduto(vendas) {
+        const tabela = `
+            <h2>Total de Vendas por Produto</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade Vendida</th>
+                        <th>Valor Total (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${vendas.map(venda => `
+                        <tr>
+                            <td>${venda.produtoId}</td>
+                            <td>${venda.descricao}</td>
+                            <td>${venda.quantidadeVendida}</td>
+                            <td>${venda.valorTotal.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ${botaoVoltar()}
+        `;
+
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
+    function mostrarFormularioPerfilCompras() {
+        const html = `
+            <h2>Consultar Perfil de Compras do Cliente</h2>
+            <label for="nome-cliente-perfil-compras">Nome do Cliente:</label><br>
+            <input type="text" id="nome-cliente-perfil-compras" placeholder="Digite o nome do cliente"><br><br>
+
+            <button class="back-button" id="btn-consultar-perfil-compras">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirPerfilCompras(perfil) {
+        const tabela = `
+            <h2>Perfil de Compras - ${perfil.nomeCliente}</h2>
+            <p><strong>Total Gasto:</strong> R$ ${perfil.totalGasto.toFixed(2)}</p>
+            <p><strong>Quantidade de Compras:</strong> ${perfil.quantidadeCompras}</p>
+
+            <h3>Produtos Comprados:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Produto</th>
+                        <th>Descrição</th>
+                        <th>Quantidade</th>
+                        <th>Valor Total (R$)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${perfil.produtosComprados.map(prod => `
+                        <tr>
+                            <td>${prod.produtoId}</td>
+                            <td>${prod.descricao}</td>
+                            <td>${prod.quantidade}</td>
+                            <td>${prod.valorTotal.toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+
+            ${botaoVoltar()}
+        `;
+
+        document.getElementById('resultado').innerHTML = tabela;
+    }
+
+    function mostrarFormularioClientesMaisCompraram() {
+        const html = `
+            <h2>Relatório - Clientes que Mais Compraram</h2>
+            <label for="data-inicio-clientes">Data Inicial:</label><br>
+            <input type="date" id="data-inicio-clientes"><br><br>
+
+            <label for="data-fim-clientes">Data Final:</label><br>
+            <input type="date" id="data-fim-clientes"><br><br>
+
+            <button class="back-button" id="btn-consultar-clientes-mais-compraram">Consultar</button>
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
+    function exibirRelatorioClientesMaisCompraram(relatorio, dataInicio, dataFim) {
+        const html = `
+            <h2>Clientes que Mais Compraram</h2>
+            <p>Período de <strong>${dataInicio}</strong> até <strong>${dataFim}</strong></p>
+
+            <pre style="background-color: #f4f4f4; padding: 15px; border-radius: 8px;">
+    ${relatorio}
+            </pre>
+
+            ${botaoVoltar()}
+        `;
+        document.getElementById('resultado').innerHTML = html;
+    }
+
     return {
         exibirProdutos,
         exibirOrcamento,
@@ -342,6 +529,15 @@ const UI = (() => {
         exibirDisponiveisCatalogo,
         mostrarFormularioDisponiveisInformados,
         exibirDisponiveisInformados,
-        exibirTaxaConversao
+        exibirTaxaConversao,
+        mostrarFormularioOrcamentosEfetivadosPeriodo,
+        exibirOrcamentosEfetivadosPeriodo,
+        mostrarFormularioVolumeVendasPeriodo,
+        exibirVolumeVendasPeriodo,
+        exibirVendasPorProduto,
+        mostrarFormularioPerfilCompras,
+        exibirPerfilCompras,
+        mostrarFormularioClientesMaisCompraram,
+        exibirRelatorioClientesMaisCompraram
     };
 })();

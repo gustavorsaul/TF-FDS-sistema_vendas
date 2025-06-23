@@ -95,7 +95,54 @@ const API = (() => {
         return response.json();
     }
     
-    
+    async function getOrcamentosEfetivadosPeriodo(dataInicial, dataFinal) {
+        const url = `http://localhost:8080/orcamentosEfetivadosPeriodo?dataInicial=${dataInicial}&dataFinal=${dataFinal}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar orçamentos efetivados no período");
+        }
+        return response.json();
+    }
+
+    async function getVolumeVendasPeriodo(dataInicio, dataFim) {
+        const url = `http://localhost:8080/vendas/volume?inicio=${dataInicio}&fim=${dataFim}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar o volume de vendas no período");
+        }
+        return response.json();
+    }
+
+    async function getVendasPorProduto() {
+        const response = await fetch(`http://localhost:8080/vendas/por-produto`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar vendas por produto");
+        }
+        return response.json();
+    }
+
+    async function getPerfilCompras(nomeCliente) {
+        const url = `http://localhost:8080/perfilCompras/${encodeURIComponent(nomeCliente)}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar perfil de compras");
+        }
+        return response.json();
+    }
+
+    async function getClientesMaisCompraram(dataInicio, dataFim) {
+        const url = `http://localhost:8080/relatorio/clientes-mais-compraram?inicio=${dataInicio}&fim=${dataFim}`;
+
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar relatório de clientes que mais compraram");
+        }
+        return response.text(); // resposta é texto puro
+    }
+
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
@@ -105,6 +152,11 @@ const API = (() => {
         chegadaEstoque,
         getDisponiveisCatalogo,
         getDisponiveisInformados,
-        getTaxaConversao
+        getTaxaConversao,
+        getOrcamentosEfetivadosPeriodo,
+        getVolumeVendasPeriodo,
+        getVendasPorProduto,
+        getPerfilCompras,
+        getClientesMaisCompraram
     };
 })();

@@ -35,6 +35,9 @@ import com.bcopstein.sistvendas.dominio.modelos.ItemDeEstoqueModel;
 
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.TotalVendasPorProdutoUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.VendasPorProdutoDTO;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.PerfilComprasClienteUC;
+import com.bcopstein.sistvendas.aplicacao.dtos.PerfilComprasClienteDTO;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.RelatorioClientesMaisCompraramUC;
 
 @RestController
 public class Controller {
@@ -77,6 +80,12 @@ public class Controller {
 
     @Autowired
     private TotalVendasPorProdutoUC totalVendasPorProdutoUC;
+
+    @Autowired
+    private PerfilComprasClienteUC perfilComprasClienteUC;
+
+    @Autowired
+    private RelatorioClientesMaisCompraramUC relatorioClientesMaisCompraramUC;
 
     @GetMapping("")
     @CrossOrigin(origins = "*")
@@ -136,6 +145,7 @@ public class Controller {
     }
     
     @GetMapping("/orcamentosEfetivadosPeriodo")
+    @CrossOrigin(origins = "*")
     public List<OrcamentoDTO> orcamentosEfetiavadosPeriodo(
         @RequestParam("dataInicial") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicial,
         @RequestParam("dataFinal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal) {
@@ -161,6 +171,20 @@ public class Controller {
     @CrossOrigin(origins = "*")
     public TaxaConversaoDTO taxaConversao() {
         return taxaConversao.run();
+    }
+
+    @GetMapping("/perfilCompras/{nomeCliente}")
+    @CrossOrigin(origins = "*")
+    public PerfilComprasClienteDTO perfilComprasCliente(@PathVariable String nomeCliente) {
+        return perfilComprasClienteUC.run(nomeCliente);
+    }
+
+    @GetMapping("/relatorio/clientes-mais-compraram")
+    @CrossOrigin(origins = "*")
+    public String relatorioClientesMaisCompraram(
+        @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+        @RequestParam("fim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fim) {
+        return relatorioClientesMaisCompraramUC.run(inicio, fim);
     }
 
 }
