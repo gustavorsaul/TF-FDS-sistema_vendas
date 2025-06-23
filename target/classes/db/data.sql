@@ -22,10 +22,10 @@ INSERT INTO item_de_estoque (id, produto_id, quantidade, estoque_min, estoque_ma
 INSERT INTO orcamento 
 (id, nome_cliente, pais, estado, custo_itens, imposto_estadual, imposto_federal, desconto, custo_consumidor, data_criacao, validade, efetivado) 
 VALUES 
-(1, 'Fulano', 'Brasil', 'RS', 7000.0, 700.0, 350.0, 0.0, 8050.0, '2025-06-10', '2025-06-20', TRUE),
-(2, 'Ciclano', 'Brasil', 'SP', 4700.0, 564.0, 235.0, 200.0, 5299.0, '2025-06-15', '2025-06-25', FALSE),
-(3, 'Maria', 'Brasil', 'RJ', 6500.0, 975.0, 325.0, 200.0, 7600.0, '2025-06-18', '2025-06-28', TRUE),
-(4, 'Joao', 'Brasil', 'RS', 4100.0, 410.0, 205.0, 100.0, 4615.0, '2025-06-19', '2025-06-29', FALSE);
+(20, 'Fulano', 'Brasil', 'RS', 7000.0, 700.0, 350.0, 0.0, 8050.0, '2025-06-10', '2025-06-20', TRUE),
+(21, 'Ciclano', 'Brasil', 'SP', 4700.0, 564.0, 235.0, 200.0, 5299.0, '2025-06-15', '2025-06-25', FALSE),
+(22, 'Maria', 'Brasil', 'RJ', 6500.0, 975.0, 325.0, 200.0, 7600.0, '2025-06-18', '2025-06-28', TRUE),
+(23, 'Joao', 'Brasil', 'RS', 4100.0, 410.0, 205.0, 100.0, 4615.0, '2025-06-19', '2025-06-29', FALSE);
 
 -- Inserção de itens de pedido
 INSERT INTO item_pedido (id, produto_id, quantidade) VALUES 
@@ -41,20 +41,20 @@ INSERT INTO item_pedido (id, produto_id, quantidade) VALUES
 -- Relacionamento entre orçamentos e itens
 -- Orçamento 1 → Televisor e Geladeira
 INSERT INTO orcamento_itens (orcamento_id, itens_id) VALUES 
-(1, 1000), 
-(1, 1001);
+(20, 1000), 
+(20, 1001);
 
 -- Orçamento 2 → Lava-louça e lava-roupas
 INSERT INTO orcamento_itens (orcamento_id, itens_id) VALUES 
-(2, 1002), 
-(2, 1003);
+(21, 1002), 
+(21, 1003);
 
 -- Orçamento 3 → Televisor e Ar-Condicionado
 INSERT INTO orcamento_itens (orcamento_id, itens_id) VALUES 
-(3, 1004), 
-(3, 1005);
+(22, 1004), 
+(22, 1005);
 
 -- Orçamento 4 → Microondas e Cafeteira
 INSERT INTO orcamento_itens (orcamento_id, itens_id) VALUES 
-(4, 1006), 
-(4, 1007);
+(23, 1006), 
+(23, 1007);

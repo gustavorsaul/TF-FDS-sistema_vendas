@@ -17,7 +17,6 @@ const Events = (() => {
                 UI.mostrarFormularioEfetivarOrcamento();
             });
 
-        // Event delegation global
         document.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'btn-voltar') {
                 UI.voltarTelaInicial();
@@ -30,6 +29,58 @@ const Events = (() => {
             }
             if (e.target && e.target.id === 'btn-criar-orcamento-final') {
                 criarOrcamento();
+            }
+        });
+
+        document.getElementById('btn-catalogo-produtos')
+        .addEventListener('click', async () => {
+            try {
+                const produtos = await API.getCatalogoProdutos();
+                UI.exibirCatalogoProdutos(produtos);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar catálogo: ${error.message}`, true);
+            }
+        });
+
+        document.getElementById('btn-chegada-estoque')
+        .addEventListener('click', () => {
+            UI.mostrarFormularioChegadaEstoque();
+        });
+
+        document.addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'btn-registrar-chegada') {
+            confirmarChegadaEstoque();
+        }
+        });
+
+        document.getElementById('btn-disponiveis-catalogo')
+        .addEventListener('click', async () => {
+            try {
+                const produtos = await API.getDisponiveisCatalogo();
+                UI.exibirDisponiveisCatalogo(produtos);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar produtos disponíveis no catálogo: ${error.message}`, true);
+            }
+        });
+
+        document.getElementById('btn-disponiveis-informados')
+        .addEventListener('click', () => {
+            UI.mostrarFormularioDisponiveisInformados();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.id === 'btn-consultar-disponiveis') {
+                consultarDisponiveisInformados();
+            }
+        });
+
+        document.getElementById('btn-taxa-conversao')
+        .addEventListener('click', async () => {
+            try {
+                const dados = await API.getTaxaConversao();
+                UI.exibirTaxaConversao(dados);
+            } catch (error) {
+                UI.mostrarMensagem(`Erro ao buscar taxa de conversão: ${error.message}`, true);
             }
         });
     }
@@ -133,7 +184,52 @@ const Events = (() => {
         }
     }
 
+    async function confirmarChegadaEstoque() {
+        const idProduto = document.getElementById('input-id-produto').value.trim();
+        const qtdade = document.getElementById('input-quantidade').value.trim();
+    
+        if (!idProduto || !qtdade || qtdade <= 0) {
+            UI.mostrarMensagem("Por favor, insira um ID de produto e uma quantidade válida.", true);
+            return;
+        }
+    
+        try {
+            const resultado = await API.chegadaEstoque(idProduto, qtdade);
+            UI.exibirChegadaEstoque(resultado);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao registrar chegada de estoque: ${error.message}`, true);
+        }
+    }    
+
+    async function consultarDisponiveisInformados() {
+        const input = document.getElementById('input-ids').value.trim();
+    
+        if (!input) {
+            UI.mostrarMensagem("Por favor, insira ao menos um ID de produto.", true);
+            return;
+        }
+    
+        const ids = input.split(',')
+            .map(id => id.trim())
+            .filter(id => id !== '' && !isNaN(id))
+            .map(Number);
+    
+        if (ids.length === 0) {
+            UI.mostrarMensagem("IDs inválidos. Informe IDs separados por vírgula.", true);
+            return;
+        }
+    
+        try {
+            const produtos = await API.getDisponiveisInformados(ids);
+            UI.exibirDisponiveisInformados(produtos);
+        } catch (error) {
+            UI.mostrarMensagem(`Erro ao buscar produtos: ${error.message}`, true);
+        }
+    }
+    
     return {
-        configurarEventos
+        configurarEventos,
+        confirmarChegadaEstoque,
+        consultarDisponiveisInformados
     };
 })();

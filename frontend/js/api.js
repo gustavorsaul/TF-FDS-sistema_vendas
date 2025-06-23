@@ -16,12 +16,10 @@ const API = (() => {
             },
             body: JSON.stringify(dadosOrcamento)
         });
-
         if (!response.ok) {
             const erro = await response.text();
             throw new Error(`Erro ao criar orçamento: ${erro}`);
         }
-
         return response.json();
     }
 
@@ -41,10 +39,72 @@ const API = (() => {
         return response.json();
     }
 
+    async function getCatalogoProdutos() {
+        const response = await fetch(`http://localhost:8080/catalogoProdutos`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar catálogo de produtos");
+        }
+        return response.json();
+    }
+
+    async function chegadaEstoque(idProduto, qtdade) {
+        const body = {
+            idProduto: parseInt(idProduto),
+            qtdade: parseInt(qtdade)
+        };
+        const response = await fetch(`http://localhost:8080/chegadaEstoque`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        if (!response.ok) {
+            const erro = await response.text();
+            throw new Error(`Erro ao registrar chegada de estoque: ${erro}`);
+        }
+        return response.json();
+    }
+
+    async function getDisponiveisCatalogo() {
+        const response = await fetch(`http://localhost:8080/disponiveisCatalogo`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar produtos disponíveis no catálogo");
+        }
+        return response.json();
+    }
+
+    async function getDisponiveisInformados(idsProdutos) {
+        const body = {
+            idsProdutos: idsProdutos.map(id => parseInt(id))
+        };
+        const response = await fetch(`http://localhost:8080/disponiveisInformados`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        if (!response.ok) {
+            throw new Error("Erro ao buscar produtos informados");
+        }
+        return response.json();
+    }
+    
+    async function getTaxaConversao() {
+        const response = await fetch(`http://localhost:8080/vendas/taxa-conversao`);
+        if (!response.ok) {
+            throw new Error("Erro ao buscar a taxa de conversão");
+        }
+        return response.json();
+    }
+    
+    
     return {
         getProdutosDisponiveis,
         criarNovoOrcamento,
         buscarOrcamentoPorId,
-        efetivarOrcamento
+        efetivarOrcamento,
+        getCatalogoProdutos,
+        chegadaEstoque,
+        getDisponiveisCatalogo,
+        getDisponiveisInformados,
+        getTaxaConversao
     };
 })();

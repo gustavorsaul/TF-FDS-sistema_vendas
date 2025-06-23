@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.BuscaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CatalogoProdutosUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ChegadaEstoqueUC;
-import com.bcopstein.sistvendas.aplicacao.casosDeUso.ConsultaEstoqueUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.CriaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisCatalogoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.DisponiveisProdutosInfUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.EfetivaOrcamentoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.OrcamentosEfetPeriodoUC;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.ProdutosDisponiveisUC;
+import com.bcopstein.sistvendas.aplicacao.casosDeUso.TaxaConversaoUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.EstoqueProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.VolumeVendasPeriodoUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.ItemPedidoDTO;
@@ -30,11 +30,8 @@ import com.bcopstein.sistvendas.aplicacao.dtos.ListaIdProdutoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.OrcamentoRequestDTO;
 import com.bcopstein.sistvendas.aplicacao.dtos.ProdutoDTO;
+import com.bcopstein.sistvendas.aplicacao.dtos.TaxaConversaoDTO;
 import com.bcopstein.sistvendas.dominio.modelos.ItemDeEstoqueModel;
-import com.bcopstein.sistvendas.dominio.modelos.OrcamentoModel;
-import com.bcopstein.sistvendas.persistencia.ItemDeEstoque;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bcopstein.sistvendas.aplicacao.casosDeUso.TotalVendasPorProdutoUC;
 import com.bcopstein.sistvendas.aplicacao.dtos.VendasPorProdutoDTO;
@@ -50,6 +47,7 @@ public class Controller {
     private DisponiveisCatalogoUC disponiveisCatalogo;
     private DisponiveisProdutosInfUC disponiveisProdutosInf;
     private OrcamentosEfetPeriodoUC orcamentosEfetPeriodo;
+    private TaxaConversaoUC taxaConversao;
 
     @Autowired
     public Controller(ProdutosDisponiveisUC produtosDisponiveis,
@@ -60,7 +58,8 @@ public class Controller {
                       ChegadaEstoqueUC chegadaEstoque,
                       DisponiveisCatalogoUC disponiveisCatalogo,
                       DisponiveisProdutosInfUC disponiveisProdutosInf,
-                      OrcamentosEfetPeriodoUC orcamentosEfetPeriodo){
+                      OrcamentosEfetPeriodoUC orcamentosEfetPeriodo,
+                      TaxaConversaoUC taxaConversao){
         this.produtosDisponiveis = produtosDisponiveis;
         this.criaOrcamento = criaOrcamento;
         this.efetivaOrcamento = efetivaOrcamento;
@@ -70,9 +69,8 @@ public class Controller {
         this.disponiveisCatalogo = disponiveisCatalogo;
         this.disponiveisProdutosInf = disponiveisProdutosInf;
         this.orcamentosEfetPeriodo = orcamentosEfetPeriodo;
+        this.taxaConversao = taxaConversao;
     }
-    @Autowired
-    private ConsultaEstoqueUC consultaEstoqueUC;
     
     @Autowired
     private VolumeVendasPeriodoUC volumeVendasPeriodoUC;
@@ -118,6 +116,7 @@ public class Controller {
         return OrcamentoDTO.fromModel(buscaOrcamento.run(idOrcamento));
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("chegadaEstoque")
     public ItemDeEstoqueModel chegadaEstoque(
         @RequestBody ItemPedidoDTO item) {
@@ -125,11 +124,13 @@ public class Controller {
     }
     
     @GetMapping("disponiveisCatalogo")
+    @CrossOrigin(origins = "*")
     public List<EstoqueProdutoDTO> disponiveisCatalogo() {
         return disponiveisCatalogo.run();
     }
     
     @PostMapping("/disponiveisInformados")
+    @CrossOrigin(origins = "*")
     public List<EstoqueProdutoDTO> produtosDisponiveisLista(@RequestBody ListaIdProdutoDTO lista) {
         return disponiveisProdutosInf.run(lista.getIdsProdutos());
     }
@@ -154,6 +155,12 @@ public class Controller {
     @CrossOrigin(origins = "*")
     public List<VendasPorProdutoDTO> totalVendasPorProduto() {
         return totalVendasPorProdutoUC.run();
+    }
+
+    @GetMapping("/vendas/taxa-conversao")
+    @CrossOrigin(origins = "*")
+    public TaxaConversaoDTO taxaConversao() {
+        return taxaConversao.run();
     }
 
 }
